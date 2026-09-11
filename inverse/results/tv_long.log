@@ -1,0 +1,23 @@
+INVERSE_RUN tv_long source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+TV outer 1 inner 644: data=0.010184 primal=1.486e-05 dual=9.898e-05 time=869.1s
+TV outer 2 inner 220: data=0.0084186 primal=1.277e-05 dual=9.93e-05 time=1081.5s
+tv COMPLETE RI=25.93378% field=0.85635% data=0.84186% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               0.067797             6.3             0.19299           true         0.0084186            true                  0.97435               864           1.3356         "tv"       0.17324              2                   0.0084186                     0.0085635                    -0.10006               0.25934         1081.6     "exact"     9.9861e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_long
+INVERSE_RUN tv_long source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/tv_long_tv.mat
+tv COMPLETE RI=25.93378% field=0.85635% data=0.84186% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               0.067797             6.3             0.19299           true         0.0084186            true                  0.97435               864           1.3356         "tv"       0.17324              2                   0.0084186                     0.0085635                    -0.10006               0.25934         1081.6     "exact"     9.9861e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_long

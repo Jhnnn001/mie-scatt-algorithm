@@ -1,0 +1,32 @@
+INVERSE_RUN tv_double source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=1.04850643e-06; 2357505 Ewald samples.
+TV 1/100: data=0.0093438 primal=0.0001515 dual=0.0008557 CG=2 time=91.5s
+TV 1/200: data=0.010276 primal=0.0001528 dual=0.0005604 CG=2 time=163.5s
+TV 1/300: data=0.012456 primal=7.545e-05 dual=0.0003157 CG=2 time=234.2s
+TV 1/400: data=0.013634 primal=4.261e-05 dual=0.0002188 CG=2 time=305.6s
+TV 1/500: data=0.014414 primal=2.742e-05 dual=0.0001559 CG=1 time=384.5s
+TV 1/600: data=0.014943 primal=1.672e-05 dual=0.0001157 CG=1 time=430.4s
+TV outer 1 inner 654: data=0.015152 primal=1.525e-05 dual=9.964e-05 time=460.0s
+TV 2/100: data=0.011479 primal=6.117e-05 dual=0.0002539 CG=2 time=532.6s
+TV 2/200: data=0.010485 primal=2.892e-05 dual=0.000163 CG=2 time=595.0s
+TV 2/300: data=0.0099366 primal=1.506e-05 dual=0.0001178 CG=1 time=653.6s
+TV outer 2 inner 365: data=0.009694 primal=1.182e-05 dual=9.981e-05 time=691.2s
+tv COMPLETE RI=27.78119% field=1.00147% data=0.96940% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.23072           true          0.009694            true                  0.93161               1019          1.3356         "tv"       0.15475              2                   0.009694                       0.010015                    -0.12097               0.27781         691.25     "exact"     9.9949e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_double
+INVERSE_RUN tv_double source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=1.04850643e-06; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/tv_double_tv.mat
+tv COMPLETE RI=27.78119% field=1.00147% data=0.96940% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.23072           true          0.009694            true                  0.93161               1019          1.3356         "tv"       0.15475              2                   0.009694                       0.010015                    -0.12097               0.27781         691.25     "exact"     9.9949e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_double

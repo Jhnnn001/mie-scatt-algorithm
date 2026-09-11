@@ -1,0 +1,2 @@
+axial_span_censored,axial_span_error,axial_span_um,background_error,converged,ewald_residual,inner_converged,intersection_over_union,iterations,mean_object_n,method,object_error,outer_iterations,physical_ewald_residual,physical_scattered_field_error,relative_index_bias,relative_ri_error,seconds,source,stationarity,true_axial_span_um
+1,0.35593220338983,8,0.233632269650537,1,0.00868924173671956,1,0.942178898806297,856,1.33563262332779,tv,0.170871279547405,1,0.00868924173671956,0.0092925560184372,-0.152254111380578,0.289449532036597,2749.09212125,exact,1.71761834592509e-06,5.9

@@ -1,0 +1,3 @@
+detector_n,detector_dx,window_um,angles,rytov_data_relative_gap
+1024,0.05,51.2,7,2.87351420330455e-11
+1024,0.1,102.4,7,1.35126179883926e-06

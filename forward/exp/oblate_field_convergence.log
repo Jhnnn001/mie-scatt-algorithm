@@ -1,0 +1,23 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2024 The MathWorks, Inc.
+              R2024a Update 9 (24.1.0.3303086) 64-bit (maca64)
+                               June 22, 2026
+
+Undefined function 'desktop' for input arguments of type 'char'.
+[Warning: MATLAB did not appear to successfully set the search path. To recover
+for this session of MATLAB, type "restoredefaultpath;matlabrc". To find out how
+to avoid this warning the next time you start MATLAB, type "docsearch problem
+path" after recovering for this session.] 
+    illumination_NA    phi_deg    window_25_to_51    dx_0p1_to_0p05    window_51_to_102
+    _______________    _______    _______________    ______________    ________________
+
+            0             0         0.00069887         5.8948e-09         0.00026148   
+         0.25             0         0.00065054          3.273e-07         0.00025885   
+         0.25            45         0.00070019         1.2351e-07         0.00022879   
+         0.25            90         0.00065054          3.273e-07         0.00025885   
+          0.5             0         0.00067323         1.0002e-06         0.00033645   
+          0.5            45         0.00073848         3.0214e-07         0.00033662   
+          0.5            90         0.00067323         1.0002e-06         0.00033645   
+
+OBLATE_FIELD_CONVERGENCE_PASS

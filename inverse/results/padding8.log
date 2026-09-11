@@ -1,0 +1,64 @@
+INVERSE_RUN padding8 source=exact padding=8 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 0.792882%
+Data-derived alpha=1.6576411e-07; 2357505 Ewald samples.
+direct COMPLETE RI=46.90558% field=17.63443% data=17.59352% converged=1
+GP 1: data=0.032355 step=0.1908 projection=9.391e-05 CG=60 time=51.4s
+GP 10: data=0.0056651 step=0.002261 projection=8.293e-05 CG=10 time=158.5s
+GP 20: data=0.0036041 step=0.0008356 projection=7.888e-05 CG=7 time=229.1s
+GP 30: data=0.0030079 step=0.0004886 projection=8.927e-05 CG=6 time=290.8s
+GP 40: data=0.0026833 step=0.0003241 projection=9.405e-05 CG=5 time=344.1s
+GP 50: data=0.0025027 step=0.0002315 projection=9.76e-05 CG=4 time=393.2s
+GP 60: data=0.0024074 step=0.0001956 projection=9.077e-05 CG=4 time=435.4s
+GP 70: data=0.0023508 step=0.0001743 projection=8.432e-05 CG=4 time=477.3s
+GP 80: data=0.0023072 step=0.0001576 projection=7.907e-05 CG=4 time=518.8s
+GP 90: data=0.0022722 step=0.0001437 projection=7.474e-05 CG=4 time=561.4s
+GP 100: data=0.0022207 step=0.0001677 projection=7.392e-05 CG=4 time=605.9s
+gp COMPLETE RI=36.37674% field=0.22632% data=0.22207% converged=0
+INVERSE_RUN padding8 source=exact padding=8 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 0.792882%
+Data-derived alpha=1.6576411e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/padding8_direct.mat
+direct COMPLETE RI=46.90558% field=17.63443% data=17.59352% converged=1
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/padding8_gp.mat
+gp COMPLETE RI=36.37674% field=0.22632% data=0.22207% converged=0
+TV 1/100: data=0.011783 primal=2.653e-05 dual=0.001155 CG=2 time=226.2s
+TV 1/200: data=0.0077811 primal=2.701e-05 dual=0.0007797 CG=1 time=403.4s
+TV outer 1 inner 200: data=0.0077811 primal=2.701e-05 dual=0.0007797 time=404.0s
+TV 2/100: data=0.0034771 primal=1.152e-05 dual=0.0008879 CG=2 time=580.2s
+TV 2/200: data=0.0027895 primal=2.447e-05 dual=0.0006711 CG=1 time=711.5s
+TV outer 2 inner 200: data=0.0027895 primal=2.447e-05 dual=0.0006711 time=712.1s
+TV 3/100: data=0.0035198 primal=1.497e-05 dual=0.0005343 CG=1 time=863.3s
+TV 3/200: data=0.0044996 primal=1.257e-05 dual=0.0004467 CG=1 time=1012.3s
+TV outer 3 inner 200: data=0.0044996 primal=1.257e-05 dual=0.0004467 time=1012.9s
+TV 4/100: data=0.0041901 primal=7.169e-06 dual=0.0003393 CG=1 time=1178.8s
+TV 4/200: data=0.0043865 primal=4.413e-06 dual=0.000301 CG=1 time=1344.8s
+TV outer 4 inner 200: data=0.0043865 primal=4.413e-06 dual=0.000301 time=1345.4s
+TV 5/100: data=0.003972 primal=5.515e-06 dual=0.0002593 CG=1 time=1524.6s
+TV 5/200: data=0.0039975 primal=6.79e-06 dual=0.0002231 CG=1 time=1704.0s
+TV outer 5 inner 200: data=0.0039975 primal=6.79e-06 dual=0.0002231 time=1704.6s
+tv COMPLETE RI=28.01233% field=0.41338% data=0.39975% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n     method     object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ________    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               -0.27119             4.3             0.22757           true           0.17594            true                  0.86847                  0          1.3356        "direct"      0.41015              0                     0.17594                       0.17634                     -0.10407              0.46906         2.6461     "exact"           NaN             5.9        
+           true                 0.35593               8             0.17049           false        0.0022207            false                 0.87022                100          1.3357        "gp"          0.32134              1                   0.0022207                     0.0022632                    -0.086089              0.36377         606.32     "exact"           NaN             5.9        
+           false               0.016949               6             0.17547           false        0.0039975            false                 0.93841               1000          1.3356        "tv"          0.21836              5                   0.0039975                     0.0041338                     -0.10607              0.28012         1704.8     "exact"     0.0002231             5.9        
+
+INVERSE_EXPERIMENT_PASS padding8
+INVERSE_RUN padding8 source=exact padding=8 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 0.792882%
+Data-derived alpha=1.6576411e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/padding8_direct.mat
+direct COMPLETE RI=46.90558% field=17.63443% data=17.59352% converged=1
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/padding8_gp.mat
+gp COMPLETE RI=36.37674% field=0.22632% data=0.22207% converged=0
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/padding8_tv.mat
+tv COMPLETE RI=28.01233% field=0.41338% data=0.39975% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n     method     object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ________    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               -0.27119             4.3             0.22757           true           0.17594            true                  0.86847                  0          1.3356        "direct"      0.41015              0                     0.17594                       0.17634                     -0.10407              0.46906         2.6461     "exact"           NaN             5.9        
+           true                 0.35593               8             0.17049           false        0.0022207            false                 0.87022                100          1.3357        "gp"          0.32134              1                   0.0022207                     0.0022632                    -0.086089              0.36377         606.32     "exact"           NaN             5.9        
+           false               0.016949               6             0.17547           false        0.0039975            false                 0.93841               1000          1.3356        "tv"          0.21836              5                   0.0039975                     0.0041338                     -0.10607              0.28012         1704.8     "exact"     0.0002231             5.9        
+
+INVERSE_EXPERIMENT_PASS padding8

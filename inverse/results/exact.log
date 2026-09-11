@@ -1,0 +1,72 @@
+INVERSE_RUN exact source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+direct COMPLETE RI=46.90558% field=18.12511% data=18.08412% converged=1
+GP 1: data=0.041187 step=0.1976 projection=9.441e-05 CG=56 time=70.0s
+GP 10: data=0.015089 step=0.003245 projection=9.719e-05 CG=18 time=314.2s
+GP 20: data=0.010228 step=0.004536 projection=9.81e-05 CG=8 time=483.9s
+INVERSE_RUN exact source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_direct.mat
+direct COMPLETE RI=46.90558% field=18.12511% data=18.08412% converged=1
+GP 1: data=0.041199 step=0.1977 projection=9.671e-05 CG=56 time=8.6s
+GP 10: data=0.015089 step=0.003245 projection=9.718e-05 CG=18 time=39.1s
+GP 20: data=0.010228 step=0.004537 projection=9.809e-05 CG=8 time=65.9s
+GP 30: data=0.011578 step=0.003522 projection=9.61e-05 CG=15 time=102.0s
+GP 40: data=0.010091 step=0.003932 projection=9.805e-05 CG=8 time=139.5s
+GP 50: data=0.01176 step=0.001211 projection=9.472e-05 CG=15 time=163.8s
+GP 60: data=0.010238 step=0.003604 projection=9.999e-05 CG=8 time=183.7s
+GP 70: data=0.01182 step=0.0008107 projection=9.986e-05 CG=14 time=205.4s
+GP 80: data=0.011877 step=0.0004799 projection=9.952e-05 CG=14 time=227.1s
+GP 90: data=0.011864 step=0.0004158 projection=9.898e-05 CG=14 time=249.0s
+GP 100: data=0.011863 step=0.0003645 projection=9.87e-05 CG=14 time=269.9s
+gp COMPLETE RI=36.52460% field=1.18595% data=1.18628% converged=0
+TV outer 1 inner 200: data=0.0079963 primal=4.267e-05 dual=0.0003829 time=286.7s
+TV outer 2 inner 200: data=0.0084094 primal=0.0001411 dual=0.0001733 time=517.5s
+TV outer 3 inner 200: data=0.0079854 primal=1.263e-05 dual=0.0001023 time=758.5s
+TV outer 4 inner 200: data=0.0074419 primal=8.374e-06 dual=0.0001096 time=1005.0s
+TV outer 5 inner 200: data=0.0072143 primal=8.265e-06 dual=0.0001045 time=1185.9s
+tv COMPLETE RI=21.69446% field=0.72493% data=0.72143% converged=0
+    relative_ri_error    object_error    background_error    mean_object_n    relative_index_bias    axial_span_um    true_axial_span_um    axial_span_error    intersection_over_union     method     source     ewald_residual    physical_ewald_residual    physical_scattered_field_error    converged    inner_converged    iterations    outer_iterations    stationarity    seconds
+    _________________    ____________    ________________    _____________    ___________________    _____________    __________________    ________________    _______________________    ________    _______    ______________    _______________________    ______________________________    _________    _______________    __________    ________________    ____________    _______
+
+         0.46906           0.41015           0.22757            1.3356              -0.10407              4.3                5.9                -0.27119                0.86847            "direct"    "exact"        0.18084                0.18084                       0.18125                 true            true                0              0                    NaN     1.6462 
+         0.36525           0.33171           0.15288            1.3357             -0.058848                8                5.9                 0.35593                0.86386            "gp"        "exact"       0.011863               0.011863                       0.01186                 false           false             100              1                    NaN     269.92 
+         0.21694           0.17503           0.12818            1.3357             -0.051009              5.6                5.9               -0.050847                0.96185            "tv"        "exact"      0.0072143              0.0072143                     0.0072493                 false           false            1000              5             0.00010496       1186 
+
+INVERSE_EXPERIMENT_PASS exact
+INVERSE_RUN exact source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_direct.mat
+direct COMPLETE RI=46.90558% field=18.12511% data=18.08412% converged=1
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_gp.mat
+gp COMPLETE RI=36.52460% field=1.18595% data=1.18628% converged=0
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_tv.mat
+tv COMPLETE RI=21.69446% field=0.72493% data=0.72143% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n     method     object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ________    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               -0.27119             4.3             0.22757           true           0.18084            true                  0.86847                  0          1.3356        "direct"      0.41015              0                     0.18084                       0.18125                     -0.10407              0.46906         1.6462     "exact"            NaN            5.9        
+           true                 0.35593               8             0.15288           false         0.011863            false                 0.86386                100          1.3357        "gp"          0.33171              1                    0.011863                       0.01186                    -0.058848              0.36525         269.92     "exact"            NaN            5.9        
+           false              -0.050847             5.6             0.12818           false        0.0072143            false                 0.96185               1000          1.3357        "tv"          0.17503              5                   0.0072143                     0.0072493                    -0.051009              0.21694           1186     "exact"     0.00010496            5.9        
+
+INVERSE_EXPERIMENT_PASS exact
+INVERSE_RUN exact source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_direct.mat
+direct COMPLETE RI=46.90558% field=18.12511% data=18.08412% converged=1
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_gp.mat
+gp COMPLETE RI=36.52460% field=1.18595% data=1.18628% converged=0
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/exact_tv.mat
+tv COMPLETE RI=21.69446% field=0.72493% data=0.72143% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n     method     object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ________    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           false               -0.27119             4.3             0.22757           true           0.18084            true                  0.86847                  0          1.3356        "direct"      0.41015              0                     0.18084                       0.18125                     -0.10407              0.46906         1.6462     "exact"            NaN            5.9        
+           true                 0.35593               8             0.15288           false         0.011863            false                 0.86386                100          1.3357        "gp"          0.33171              1                    0.011863                       0.01186                    -0.058848              0.36525         269.92     "exact"            NaN            5.9        
+           false              -0.050847             5.6             0.12818           false        0.0072143            false                 0.96185               1000          1.3357        "tv"          0.17503              5                   0.0072143                     0.0072493                    -0.051009              0.21694           1186     "exact"     0.00010496            5.9        
+
+INVERSE_EXPERIMENT_PASS exact

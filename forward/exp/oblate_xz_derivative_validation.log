@@ -1,0 +1,80 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2024 The MathWorks, Inc.
+              R2024a Update 9 (24.1.0.3303086) 64-bit (maca64)
+                               June 22, 2026
+
+Undefined function 'desktop' for input arguments of type 'char'.
+[Warning: MATLAB did not appear to successfully set the search path. To recover
+for this session of MATLAB, type "restoredefaultpath;matlabrc". To find out how
+to avoid this warning the next time you start MATLAB, type "docsearch problem
+path" after recovering for this session.] 
+Reference L=114 M=59 mu=0 elapsed=1.5s
+Reference L=114 M=59 mu=1 elapsed=3.2s
+Reference L=114 M=59 mu=2 elapsed=4.6s
+Reference L=114 M=59 mu=3 elapsed=6.2s
+Reference L=114 M=59 mu=4 elapsed=7.8s
+Reference L=114 M=59 mu=5 elapsed=9.6s
+Reference L=114 M=59 mu=6 elapsed=11.0s
+Reference L=114 M=59 mu=7 elapsed=12.3s
+Reference L=114 M=59 mu=8 elapsed=14.2s
+Reference L=114 M=59 mu=9 elapsed=16.9s
+Reference L=114 M=59 mu=10 elapsed=18.5s
+Reference L=114 M=59 mu=11 elapsed=19.6s
+Reference L=114 M=59 mu=12 elapsed=21.2s
+Reference L=114 M=59 mu=13 elapsed=22.8s
+Reference L=114 M=59 mu=14 elapsed=24.1s
+Reference L=114 M=59 mu=15 elapsed=25.5s
+Reference L=114 M=59 mu=16 elapsed=26.9s
+Reference L=114 M=59 mu=17 elapsed=28.9s
+Reference L=114 M=59 mu=18 elapsed=30.5s
+Reference L=114 M=59 mu=19 elapsed=32.2s
+Reference L=114 M=59 mu=20 elapsed=33.7s
+Reference L=114 M=59 mu=21 elapsed=35.3s
+Reference L=114 M=59 mu=22 elapsed=36.6s
+Reference L=114 M=59 mu=23 elapsed=38.1s
+Reference L=114 M=59 mu=24 elapsed=39.7s
+Reference L=114 M=59 mu=25 elapsed=41.5s
+Reference L=114 M=59 mu=26 elapsed=42.5s
+Reference L=114 M=59 mu=27 elapsed=43.4s
+Reference L=114 M=59 mu=28 elapsed=44.4s
+Reference L=114 M=59 mu=29 elapsed=45.6s
+Reference L=114 M=59 mu=30 elapsed=46.9s
+Reference L=114 M=59 mu=31 elapsed=48.0s
+Reference L=114 M=59 mu=32 elapsed=49.2s
+Reference L=114 M=59 mu=33 elapsed=50.1s
+Reference L=114 M=59 mu=34 elapsed=50.9s
+Reference L=114 M=59 mu=35 elapsed=51.7s
+Reference L=114 M=59 mu=36 elapsed=52.5s
+Reference L=114 M=59 mu=37 elapsed=53.2s
+Reference L=114 M=59 mu=38 elapsed=54.0s
+Reference L=114 M=59 mu=39 elapsed=55.1s
+Reference L=114 M=59 mu=40 elapsed=56.6s
+Reference L=114 M=59 mu=41 elapsed=57.7s
+Reference L=114 M=59 mu=42 elapsed=58.6s
+Reference L=114 M=59 mu=43 elapsed=59.8s
+Reference L=114 M=59 mu=44 elapsed=61.2s
+Reference L=114 M=59 mu=45 elapsed=62.2s
+Reference L=114 M=59 mu=46 elapsed=63.6s
+Reference L=114 M=59 mu=47 elapsed=64.5s
+Reference L=114 M=59 mu=48 elapsed=65.8s
+Reference L=114 M=59 mu=49 elapsed=66.9s
+Reference L=114 M=59 mu=50 elapsed=68.4s
+Reference L=114 M=59 mu=51 elapsed=69.5s
+Reference L=114 M=59 mu=52 elapsed=70.5s
+Reference L=114 M=59 mu=53 elapsed=71.3s
+Reference L=114 M=59 mu=54 elapsed=72.3s
+Reference L=114 M=59 mu=55 elapsed=73.2s
+Reference L=114 M=59 mu=56 elapsed=74.2s
+Reference L=114 M=59 mu=57 elapsed=75.2s
+Reference L=114 M=59 mu=58 elapsed=76.2s
+Reference L=114 M=59 mu=59 elapsed=77.0s
+BATCH_BOUNDARY_PASS vector=3.78e-13 scalar=1.82e-13 time=77.0s
+NEAR_FIELDS 8/8 vector=1 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+NEAR_FIELDS 8/8 vector=0 gradient=1
+XZ_PUBLIC_AND_PDE_PASS vector=7.34e-16 gradient=1.61e-08 PDE=5.43e-07

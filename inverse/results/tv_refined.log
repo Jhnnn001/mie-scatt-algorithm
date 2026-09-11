@@ -1,0 +1,24 @@
+INVERSE_RUN tv_refined source=exact padding=8 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 0.792882%
+Data-derived alpha=1.6576411e-07; 2357505 Ewald samples.
+TV 1/100: data=0.0087467 primal=0.0009802 dual=6.919e-05 CG=5 time=589.9s
+TV 1/200: data=0.0087261 primal=0.0001707 dual=1.629e-05 CG=3 time=902.7s
+TV outer 1 inner 240: data=0.0087189 primal=9.946e-05 dual=1.239e-05 time=1007.4s
+tv COMPLETE RI=29.35796% field=0.93101% data=0.87189% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.23581           true         0.0087189            true                  0.93738               240           1.3356         "tv"       0.17488              1                   0.0087189                     0.0093101                    -0.15452               0.29358         1007.7     "exact"     1.8471e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_refined
+INVERSE_RUN tv_refined source=exact padding=8 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 0.792882%
+Data-derived alpha=1.6576411e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/tv_refined_tv.mat
+tv COMPLETE RI=29.35796% field=0.93101% data=0.87189% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.23581           true         0.0087189            true                  0.93738               240           1.3356         "tv"       0.17488              1                   0.0087189                     0.0093101                    -0.15452               0.29358         1007.7     "exact"     1.8471e-05            5.9        
+
+INVERSE_EXPERIMENT_PASS tv_refined

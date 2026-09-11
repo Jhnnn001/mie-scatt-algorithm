@@ -1,0 +1,62 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2024 The MathWorks, Inc.
+              R2024a Update 9 (24.1.0.3303086) 64-bit (maca64)
+                               June 22, 2026
+
+Undefined function 'desktop' for input arguments of type 'char'.
+[Warning: MATLAB did not appear to successfully set the search path. To recover
+for this session of MATLAB, type "restoredefaultpath;matlabrc". To find out how
+to avoid this warning the next time you start MATLAB, type "docsearch problem
+path" after recovering for this session.] 
+Reference L=25 M=10 mu=0 elapsed=0.5s
+Reference L=25 M=10 mu=1 elapsed=1.2s
+Reference L=25 M=10 mu=2 elapsed=1.4s
+Reference L=25 M=10 mu=3 elapsed=1.5s
+Reference L=25 M=10 mu=4 elapsed=1.7s
+Reference L=25 M=10 mu=5 elapsed=2.0s
+Reference L=25 M=10 mu=6 elapsed=2.2s
+Reference L=25 M=10 mu=7 elapsed=2.4s
+Reference L=25 M=10 mu=8 elapsed=2.5s
+Reference L=25 M=10 mu=9 elapsed=2.7s
+Reference L=25 M=10 mu=10 elapsed=2.8s
+SMALL_CUTOFF_FAIL L=25 Independent boundary residual: vector 2.18e-06 scalar 9.54e-16.
+Reference L=30 M=10 mu=0 elapsed=0.1s
+Reference L=30 M=10 mu=1 elapsed=0.5s
+Reference L=30 M=10 mu=2 elapsed=1.0s
+Reference L=30 M=10 mu=3 elapsed=1.1s
+Reference L=30 M=10 mu=4 elapsed=1.3s
+Reference L=30 M=10 mu=5 elapsed=1.5s
+Reference L=30 M=10 mu=6 elapsed=1.7s
+Reference L=30 M=10 mu=7 elapsed=2.0s
+Reference L=30 M=10 mu=8 elapsed=2.2s
+Reference L=30 M=10 mu=9 elapsed=2.3s
+Reference L=30 M=10 mu=10 elapsed=2.5s
+BATCH_BOUNDARY_PASS vector=9.73e-07 scalar=9.35e-16 time=2.5s
+SMALL_CUTOFF L=30 boundary=9.72533122731e-07 scalar=9.35273161767e-16
+Reference L=35 M=10 mu=0 elapsed=0.2s
+Reference L=35 M=10 mu=1 elapsed=0.5s
+Reference L=35 M=10 mu=2 elapsed=0.7s
+Reference L=35 M=10 mu=3 elapsed=0.9s
+Reference L=35 M=10 mu=4 elapsed=1.4s
+Reference L=35 M=10 mu=5 elapsed=1.6s
+Reference L=35 M=10 mu=6 elapsed=1.8s
+Reference L=35 M=10 mu=7 elapsed=2.0s
+Reference L=35 M=10 mu=8 elapsed=2.2s
+Reference L=35 M=10 mu=9 elapsed=2.5s
+Reference L=35 M=10 mu=10 elapsed=2.6s
+BATCH_BOUNDARY_PASS vector=5.84e-09 scalar=9.43e-16 time=2.7s
+SMALL_CUTOFF L=35 boundary=5.83891426237e-09 scalar=9.43208701985e-16
+Reference L=40 M=10 mu=0 elapsed=0.2s
+Reference L=40 M=10 mu=1 elapsed=0.4s
+Reference L=40 M=10 mu=2 elapsed=0.9s
+Reference L=40 M=10 mu=3 elapsed=1.2s
+Reference L=40 M=10 mu=4 elapsed=1.4s
+Reference L=40 M=10 mu=5 elapsed=2.0s
+Reference L=40 M=10 mu=6 elapsed=2.2s
+Reference L=40 M=10 mu=7 elapsed=2.4s
+Reference L=40 M=10 mu=8 elapsed=2.5s
+Reference L=40 M=10 mu=9 elapsed=2.9s
+Reference L=40 M=10 mu=10 elapsed=3.2s
+BATCH_BOUNDARY_PASS vector=2.85e-10 scalar=1.18e-15 time=3.3s
+SMALL_CUTOFF L=40 boundary=2.85277956718e-10 scalar=1.18130765821e-15

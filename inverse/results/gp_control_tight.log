@@ -1,0 +1,37 @@
+INVERSE_RUN gp_control_tight source=matched padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.37983939e-07; 2357505 Ewald samples.
+GP 1: data=0.02617 step=0.2096 projection=1.643e-05 CG=200 time=31.5s
+GP 10: data=0.006668 step=0.002648 projection=9.871e-06 CG=47 time=103.2s
+GP 20: data=0.0039568 step=0.001055 projection=9.597e-06 CG=33 time=143.4s
+GP 30: data=0.003013 step=0.0007639 projection=9.706e-06 CG=21 time=171.9s
+GP 40: data=0.0026719 step=0.0004366 projection=9.591e-06 CG=24 time=197.4s
+GP 50: data=0.0023472 step=0.0004809 projection=9.971e-06 CG=16 time=220.6s
+GP 60: data=0.0021915 step=0.000336 projection=9.924e-06 CG=21 time=242.5s
+GP 70: data=0.0020661 step=0.0003269 projection=9.832e-06 CG=21 time=262.6s
+GP 80: data=0.0019286 step=0.0002813 projection=9.828e-06 CG=16 time=281.5s
+GP 90: data=0.0018744 step=0.0001739 projection=9.863e-06 CG=18 time=300.5s
+GP 100: data=0.0017852 step=0.0001747 projection=9.966e-06 CG=16 time=318.5s
+GP 110: data=0.0017358 step=0.0001624 projection=9.855e-06 CG=16 time=337.3s
+GP 120: data=0.0016994 step=0.0001886 projection=9.654e-06 CG=18 time=355.3s
+GP 130: data=0.0016382 step=0.0001141 projection=9.937e-06 CG=16 time=372.3s
+GP 140: data=0.0016084 step=0.0001087 projection=9.826e-06 CG=16 time=389.9s
+GP 150: data=0.0015848 step=0.0001035 projection=9.692e-06 CG=16 time=406.8s
+gp COMPLETE RI=33.08055% field=1.68771% data=0.15685% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds     source      stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _________    ____________    __________________
+
+           true                0.033898             6.1             0.13886           true         0.0015685            true                  0.89085               158           1.3357         "gp"       0.30025              1                   0.016447                       0.016877                    -0.071937              0.33081          420.9     "matched"        NaN                5.9        
+
+INVERSE_EXPERIMENT_PASS gp_control_tight
+INVERSE_RUN gp_control_tight source=matched padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.37983939e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/gp_control_tight_gp.mat
+gp COMPLETE RI=33.08055% field=1.68771% data=0.15685% converged=1
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds     source      stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _________    ____________    __________________
+
+           true                0.033898             6.1             0.13886           true         0.0015685            true                  0.89085               158           1.3357         "gp"       0.30025              1                   0.016447                       0.016877                    -0.071937              0.33081          420.9     "matched"        NaN                5.9        
+
+INVERSE_EXPERIMENT_PASS gp_control_tight

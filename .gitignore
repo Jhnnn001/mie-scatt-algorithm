@@ -1,0 +1,5 @@
+.gitignore
+.DS_Store
+
+# Exceeds GitHub 100MB file limit
+inverse/results/exact_detector_512.mat

@@ -1,0 +1,52 @@
+INVERSE_RUN gp_tight source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+GP 1: data=0.056097 step=0.2081 projection=2.585e-05 CG=200 time=20.3s
+GP 10: data=0.066781 step=0.01075 projection=1.388e-05 CG=200 time=194.7s
+GP 20: data=0.065844 step=0.007121 projection=1.36e-05 CG=200 time=411.6s
+GP 30: data=0.064795 step=0.005448 projection=1.296e-05 CG=200 time=645.2s
+GP 40: data=0.064022 step=0.004428 projection=1.247e-05 CG=200 time=894.6s
+GP 50: data=0.063373 step=0.003735 projection=1.236e-05 CG=200 time=1149.4s
+GP 60: data=0.059888 step=0.005012 projection=1.257e-05 CG=200 time=1381.2s
+GP 70: data=0.056969 step=0.01066 projection=1.371e-05 CG=200 time=1602.0s
+GP 80: data=0.053046 step=0.01587 projection=9.963e-06 CG=118 time=1786.4s
+GP 90: data=0.054808 step=0.01191 projection=1.293e-05 CG=200 time=1929.5s
+GP 100: data=0.056993 step=0.005844 projection=1.28e-05 CG=200 time=2077.1s
+GP 110: data=0.053676 step=0.01286 projection=1.3e-05 CG=200 time=2219.1s
+GP 120: data=0.048015 step=0.01425 projection=9.968e-06 CG=118 time=2353.3s
+GP 130: data=0.047241 step=0.01432 projection=9.873e-06 CG=118 time=2487.8s
+GP 140: data=0.046987 step=0.01428 projection=9.815e-06 CG=118 time=2624.7s
+GP 150: data=0.046857 step=0.0142 projection=9.726e-06 CG=118 time=2768.8s
+GP 160: data=0.046769 step=0.0141 projection=9.672e-06 CG=118 time=2910.5s
+GP 170: data=0.046655 step=0.01399 projection=9.716e-06 CG=118 time=3057.1s
+GP 180: data=0.046598 step=0.014 projection=9.918e-06 CG=117 time=3200.6s
+GP 190: data=0.046539 step=0.01389 projection=9.913e-06 CG=117 time=3347.2s
+GP 200: data=0.046516 step=0.01383 projection=9.872e-06 CG=117 time=3488.9s
+GP 210: data=0.046494 step=0.01378 projection=9.887e-06 CG=117 time=3631.3s
+GP 220: data=0.046491 step=0.01359 projection=9.713e-06 CG=118 time=3770.5s
+GP 230: data=0.046439 step=0.01364 projection=9.787e-06 CG=117 time=3911.8s
+GP 240: data=0.046413 step=0.01357 projection=9.799e-06 CG=117 time=4052.1s
+GP 250: data=0.046394 step=0.01351 projection=9.829e-06 CG=117 time=4190.8s
+GP 260: data=0.046371 step=0.01343 projection=9.807e-06 CG=117 time=4309.2s
+GP 270: data=0.046369 step=0.01337 projection=9.75e-06 CG=117 time=4427.4s
+GP 280: data=0.046317 step=0.01328 projection=9.706e-06 CG=117 time=4574.5s
+GP 290: data=0.046296 step=0.01327 projection=9.671e-06 CG=117 time=4720.7s
+GP 300: data=0.04622 step=0.01335 projection=9.916e-06 CG=114 time=4870.7s
+gp COMPLETE RI=85.00465% field=4.61145% data=4.62197% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.37014           false         0.04622             false                 0.61987               300           1.3357         "gp"       0.76523              1                    0.04622                       0.046115                    -0.065315              0.85005         4870.8     "exact"        NaN                5.9        
+
+INVERSE_EXPERIMENT_PASS gp_tight
+INVERSE_RUN gp_tight source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=5.24253214e-07; 2357505 Ewald samples.
+Reusing validated settings checkpoint /Users/jhlee/Documents/jhlee_forge/projects/mie-scatt-algorithm/inverse/results/gp_tight_gp.mat
+gp COMPLETE RI=85.00465% field=4.61145% data=4.62197% converged=0
+    axial_span_censored    axial_span_error    axial_span_um    background_error    converged    ewald_residual    inner_converged    intersection_over_union    iterations    mean_object_n    method    object_error    outer_iterations    physical_ewald_residual    physical_scattered_field_error    relative_index_bias    relative_ri_error    seconds    source     stationarity    true_axial_span_um
+    ___________________    ________________    _____________    ________________    _________    ______________    _______________    _______________________    __________    _____________    ______    ____________    ________________    _______________________    ______________________________    ___________________    _________________    _______    _______    ____________    __________________
+
+           true                0.35593               8              0.37014           false         0.04622             false                 0.61987               300           1.3357         "gp"       0.76523              1                    0.04622                       0.046115                    -0.065315              0.85005         4870.8     "exact"        NaN                5.9        
+
+INVERSE_EXPERIMENT_PASS gp_tight

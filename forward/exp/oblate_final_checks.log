@@ -1,0 +1,48 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2024 The MathWorks, Inc.
+              R2024a Update 9 (24.1.0.3303086) 64-bit (maca64)
+                               June 22, 2026
+
+Undefined function 'desktop' for input arguments of type 'char'.
+[Warning: MATLAB did not appear to successfully set the search path. To recover
+for this session of MATLAB, type "restoredefaultpath;matlabrc". To find out how
+to avoid this warning the next time you start MATLAB, type "docsearch problem
+path" after recovering for this session.] 
+Reference L=18 M=12 mu=0 elapsed=0.3s
+Reference L=18 M=12 mu=1 elapsed=0.5s
+Reference L=18 M=12 mu=2 elapsed=0.6s
+Reference L=18 M=12 mu=3 elapsed=0.7s
+Reference L=18 M=12 mu=4 elapsed=0.8s
+Reference L=18 M=12 mu=5 elapsed=0.9s
+Reference L=18 M=12 mu=6 elapsed=1.0s
+Reference L=18 M=12 mu=7 elapsed=1.1s
+Reference L=18 M=12 mu=8 elapsed=1.1s
+Reference L=18 M=12 mu=9 elapsed=1.2s
+Reference L=18 M=12 mu=10 elapsed=1.3s
+Reference L=18 M=12 mu=11 elapsed=1.3s
+Reference L=18 M=12 mu=12 elapsed=1.4s
+BATCH_BOUNDARY_PASS vector=3.58e-08 scalar=7.6e-16 time=1.4s
+OBLATE_IMPLEMENTATION_CHECKS_PASS public_far_gap=1.24e-10
+     configuration            metric            pupil_weighted_mean    pooled_L2     maximum      minimum     worst_illumination_NA    worst_phi_deg
+    _______________    _____________________    ___________________    _________    _________    _________    _____________________    _____________
+
+    "baseline"         "continuous_born_co"            0.91319           0.91368      0.93648      0.89084             0.5                   90     
+    "baseline"         "continuous_rytov_co"           0.10511           0.10529      0.11194      0.09864             0.5                    0     
+    "baseline"         "voxel_born_co"                 0.89679           0.89716      0.91968      0.88095             0.5                  225     
+    "baseline"         "voxel_rytov_co"               0.097513          0.097754      0.10844     0.085003             0.5                  225     
+    "baseline"         "scalar_co"                   0.0070612         0.0070587    0.0073448    0.0065967            0.05                   90     
+    "window_51"        "continuous_born_co"            0.91319           0.91368      0.93648      0.89084             0.5                  270     
+    "window_51"        "continuous_rytov_co"           0.10509           0.10528      0.11192     0.098689             0.5                    0     
+    "window_51"        "scalar_co"                   0.0070497         0.0070472    0.0073326    0.0065756            0.05                   45     
+    "sampling_0p05"    "continuous_born_co"            0.91319           0.91368      0.93648      0.89084             0.5                  270     
+    "sampling_0p05"    "continuous_rytov_co"           0.10509           0.10528      0.11192     0.098689             0.5                    0     
+    "sampling_0p05"    "scalar_co"                   0.0070497         0.0070472    0.0073326    0.0065756            0.05                   45     
+
+    fine_mean    radial_step_0p1_mean    azimuth_step_90_mean    radial_mean_gap    azimuth_mean_gap
+    _________    ____________________    ____________________    _______________    ________________
+
+     0.10509            0.1052                 0.10509             0.00010991          4.7609e-07   
+
+OBLATE_SUMMARY_FINISHED
+OBLATE_FINAL_CHECKS_PASS

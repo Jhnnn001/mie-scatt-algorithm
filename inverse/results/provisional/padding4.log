@@ -1,0 +1,6 @@
+INVERSE_RUN padding4 source=exact padding=4 grid=[128 128 80] dx=0.1
+Known object vs physical Rytov Ewald data: 1.674612%
+Data-derived alpha=2.81485477e-07; 2357505 Ewald samples.
+direct COMPLETE RI=58.78227% field=22.03134% data=22.01979% converged=1
+GP 1: data=0.060764 step=0.6939 projection=0.0003645 CG=50 time=38.3s
+GP 10: data=0.01754 step=0.005867 projection=8.795e-05 CG=23 time=285.9s
