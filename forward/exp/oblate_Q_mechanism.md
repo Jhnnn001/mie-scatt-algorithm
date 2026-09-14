@@ -1,6 +1,6 @@
 # Interpretation of the internal Q maximum
 
-Read-only analysis of the existing exact fields on September 12, 2026.
+Interpretation of the retained exact fields in `oblate_xz_exact.mat`.
 
 The leading interpretation is concentration of internally reflected waves near
 an axial caustic, followed by interference with the predominantly forward field.
@@ -36,7 +36,6 @@ For normal incidence, representative reflected rays cross the z axis as follows:
 | 3 | 2.953028 | 2.420881 | -0.240463 |
 | 4 | 3.937078 | 1.849268 | 0.862068 |
 
-See oblate_Q_reflected_ray_interpretation.png for these paths over the exact Q map.
 The ray calculation includes neither Fresnel amplitude weights nor diffraction;
 it explains the spatial concentration, not the exact field amplitude or Q peak.
 The exact maximum can lie away from a geometric focus because Q is a logarithmic

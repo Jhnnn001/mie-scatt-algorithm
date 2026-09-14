@@ -1,6 +1,6 @@
 function test_barton2001
 % Far-field maxima from Barton, Appl. Opt. 40, 3598-3607 (2001).
-% Source: ref/mie-scatt/ao-40-21-3598.pdf. Geometry and illumination are
+% Source: doi:10.1364/AO.40.003598. Geometry and illumination are
 % on p. 3602, Eq. (50) is on p. 3603, and the reference maxima are in
 % the captions of Figs. 7 and 13 on pp. 3604-3605.
 

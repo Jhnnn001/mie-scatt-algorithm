@@ -53,6 +53,9 @@ for j = 1:numel(known)
 end
 validateattributes(opts.tol, {'numeric'}, ...
     {'real', 'finite', 'scalar', 'positive'}, mfilename, 'opts.tol');
+if opts.tol < 100*eps
+    error('born_rytov_spheroid:InvalidTolerance', 'opts.tol must be at least 100*eps.');
+end
 for name = {'N_theta', 'N_max', 'chunk'}
     validateattributes(opts.(name{1}), {'numeric'}, ...
         {'real', 'finite', 'scalar', 'integer', 'positive'}, mfilename, ['opts.' name{1}]);

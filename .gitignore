@@ -1,5 +1,9 @@
-.gitignore
 .DS_Store
-
-# Exceeds GitHub 100MB file limit
+__pycache__/
+.venv/
+*.log
+# Regenerable reference and detector caches; the selected inverse reference is retained.
+forward/exp/oblate_reference_*.mat
+spheroid-analytic-forward/[12]/case_*_reference.mat
+!spheroid-analytic-forward/2/case_3_reference.mat
 inverse/results/exact_detector_512.mat

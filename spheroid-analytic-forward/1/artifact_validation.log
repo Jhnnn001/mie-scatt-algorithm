@@ -1,5 +1,0 @@
-EXPERIMENT_1_CSV_AND_PLOTS_PASS: 243 directions, 30 summaries, 21 detector checks
-relative scalar signal norms: [1.00000000e+00 1.15466141e-02 3.68091904e-05]
-EXPERIMENT_2_CSV_AND_PLOTS_PASS: 243 directions, 30 summaries, 21 detector checks
-relative scalar signal norms: [1.         0.55028368 0.01134331]
-COMMON_BASELINE_AND_PREVIOUS_EXPERIMENT_REPRODUCED

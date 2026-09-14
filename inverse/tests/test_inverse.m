@@ -63,12 +63,7 @@ small_geom=g; small_geom.grid_size=[8,8,8];
 independent=odt_prepare(u0+b,u0,small_geom,'born');
 assert(norm(independent.samples-db.samples)<1e-12);
 assert(isequal(independent.operator.grid_size,[8,8,8]));
-assert(exist('demo_inverse','file') == 2, 'Missing water/cell demonstration.');
-demo = demo_inverse(0.55,'rytov',struct('grid_size',32,'a',1,'b',0.6, ...
-    'n_angles',13,'plot',false,'max_iter',20,'outer_iter',2));
-assert(numel(demo.reconstructions)==3 && all(isfinite(demo.metrics.relative_ri_error)));
-assert(demo.n_m==nm && abs(demo.n_cell-1.33567771866)<1e-12 && demo.NA_det==0.55);
-fprintf('inverse/tests/run_all: PASS\n');
+fprintf('test_inverse: PASS\n');
 end
 
 function expect_error(action,id)

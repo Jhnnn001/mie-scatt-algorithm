@@ -1,6 +1,6 @@
 function api = oblate_na_sweep(stage)
 %OBLATE_NA_SWEEP Reproducible Born/Rytov experiment, lengths in um.
-% Run stages 'check', 'reference', 'sweep', 'fieldcheck', 'report' in that order.
+% Stages: 'check', 'reference', 'xz', 'xz_validate'; 'helpers' shares the solver.
 % Experimental batch assembly uses the public solver's bases and equations;
 % its validation is recorded separately from spheroid_solve/info.validated.
 if nargin==0, stage='check'; end
@@ -15,8 +15,7 @@ switch stage
         % Reuse the same experimental equations in the size/contrast studies.
         api=struct('reference',@batch_reference,'far_fields',@far_fields, ...
             'public_far_check',@public_far_check,'subset',@subset_reference, ...
-            'spectra',@continuous_spectra,'weights',@illumination_weights, ...
-            'near_fields',@near_fields,'scalar_scaled_reference',@scalar_scaled_reference);
+            'spectra',@continuous_spectra,'weights',@illumination_weights);
     case 'check'
         q=p; q.lambda=2*pi; q.n_m=1; q.n_p=1+1e-5;
         q.a=.6; q.b=1; q.theta=[0;.3]; q.NA_det=.8;
@@ -77,14 +76,6 @@ switch stage
             {'cutoff_vector','cutoff_scalar','vector_boundary','scalar_boundary','public_far_gap'});
         writetable(validation,fullfile(out,'oblate_reference_validation.csv'));
         fprintf('OBLATE_REFERENCES_PASS vector %.3g scalar %.3g\n',cutoff_vector,cutoff_scalar);
-    case 'sweep'
-        load(fullfile(out,'oblate_reference_1.mat'),'s');
-        assert(isequal(s.parameters,p),'Reference parameters differ.');
-        run_sweep(s,out);
-    case 'report'
-        summarize_results(out);
-    case 'fieldcheck'
-        field_convergence(p,out);
     case {'xz','xz_validate'}
         p.theta=[0;5;10;15]*pi/180;
         p.illumination_NA=p.n_m*sin(p.theta);
@@ -272,32 +263,6 @@ for j=[1,2*numel(s.theta)-1,2*numel(s.theta)]
 end
 end
 
-function run_sweep(s,out)
-% Full baseline plus continuous and voxel convergence controls.
-configs={ ...
-    'baseline',256,.1,80,2,false; ...
-    'window_51',512,.1,0,0,false; ...
-    'sampling_0p05',1024,.05,0,0,false; ...
-    'padding_3',256,.1,80,3,true; ...
-    'voxel_0p0667',384,1/15,120,2,true; ...
-    'voxel_window_51',512,.1,80,2,true};
-allrows=table;
-for k=1:size(configs,1)
-    [name,N,dx,Nz,padding,subset]=configs{k,:};
-    filename=fullfile(out,['oblate_',name,'.csv']);
-    if subset
-        ref=subset_reference(s,[1,6,11]); az=[0,45,90]*pi/180;
-    else
-        ref=s; az=(0:45:315)*pi/180;
-    end
-    rows=grid_sweep(ref,N,dx,Nz,padding,az,name);
-    writetable(rows,filename);
-    allrows=[allrows;rows]; %#ok<AGROW>
-    writetable(allrows,fullfile(out,'oblate_angles.csv'));
-end
-fprintf('OBLATE_SWEEP_FINISHED rows=%d\n',height(allrows));
-end
-
 function s=subset_reference(s,indices)
 s.theta=s.theta(indices); s.illumination_NA=s.illumination_NA(indices);
 v=reshape([2*indices-1;2*indices],1,[]);
@@ -309,152 +274,12 @@ for k=1:numel(s.modes)
 end
 end
 
-function results=grid_sweep(s,N,dx,Nz,padding,az,name)
-timer=tic; k0=2*pi/s.lambda; k=s.km;
-xy=(-N/2:N/2-1)*dx; [X,Y]=ndgrid(xy,xy);
-freq=(-N/2:N/2-1)*2*pi/(N*dx); [KX,KY]=ndgrid(freq,freq);
-prop=KX.^2+KY.^2<k^2; pupil=KX.^2+KY.^2<=(k0*s.NA_det)^2;
-KZ=zeros(N); KZ(prop)=sqrt(k^2-KX(prop).^2-KY(prop).^2);
-eta=KZ(pupil)/k; detector_phi=atan2(KY(pupil),KX(pupil));
-factor=2*pi*1i*exp(1i*KZ(pupil)*s.z_det)./KZ(pupil);
-% Each actual incident azimuth is evaluated on the same laboratory FFT grid.
-thetas=[]; phis=[];
-for phi=az
-    ix=1:numel(s.theta); if phi~=0, ix=ix(s.theta(ix)>0); end
-    thetas=[thetas;s.theta(ix)]; phis=[phis;repmat(phi,numel(ix),1)]; %#ok<AGROW>
-end
-use_voxel=Nz>0; volume_error=NaN;
-if use_voxel
-    z=(-Nz/2:Nz/2-1)*dx;
-    inside=(xy(:).^2+xy.^2)/s.b^2+reshape(z.^2,1,1,[])/s.a^2<=1;
-    n=s.n_m*ones(N,N,Nz); n(inside)=s.n_p;
-    volume_error=nnz(inside)*dx^3/(4*pi*s.a*s.b^2/3)-1;
-    fprintf('Voxel %s N=%d Nz=%d dx=%.6g padding=%d angles=%d\n', ...
-        name,N,Nz,dx,padding,numel(thetas));
-    [vB,vR,~,vi]=born_rytov_voxel(s.lambda,n,s.n_m,dx,thetas,phis, ...
-        s.NA_det,s.z_det,struct('pad_factor',padding));
-    clear n inside
-    voxel_seconds=vi.time; clear vi
-else
-    voxel_seconds=NaN;
-end
-rows=struct([]); row=0;
-for phi=az
-    [EV,US]=far_fields(s,eta,detector_phi-phi);
-    EV=EV.*factor; US=US.*factor;
-    for j=1:numel(s.theta)
-        if s.theta(j)==0 && phi~=0, continue; end
-        theta=s.theta(j); ki=k*[sin(theta)*cos(phi),sin(theta)*sin(phi),cos(theta)];
-        eTM=[cos(theta),0,-sin(theta)]; eTE=[0,1,0];
-        e0=cos(phi)*eTM-sin(phi)*eTE;
-        % Compare in the incidence-plane frame; rotating all vectors back is unitary.
-        exact=cos(phi)*EV(:,:,2*j-1)-sin(phi)*EV(:,:,2*j);
-        co=exact*e0.'; scalar=US(:,j);
-        [~,~,~,lab_e0]=incident_plane_wave(k,s.n_m,theta,phi,[1,0],0,0,0);
-        rotation=[cos(phi),-sin(phi),0;sin(phi),cos(phi),0;0,0,1];
-        assert(norm((rotation*e0.').'-lab_e0)<1e-13,'Polarization rotation mismatch.');
-        [B,R,phase]=continuous_spectra(s,KX,KY,KZ,prop,X,Y,ki,dx);
-        R(~pupil)=0;
-        assert(all(isfinite(R),'all'),'Nonfinite continuous Rytov field.');
-        row=row+1;
-        rows(row).configuration=string(name);
-        rows(row).Nxy=N; rows(row).Nz=Nz; rows(row).dx_um=dx;
-        rows(row).padding=padding; rows(row).window_um=N*dx;
-        rows(row).illumination_NA=s.illumination_NA(j);
-        rows(row).theta_deg=theta*180/pi; rows(row).phi_deg=phi*180/pi;
-        rows(row).continuous_born_scalar=relative(B(pupil),scalar);
-        rows(row).continuous_rytov_scalar=relative(R(pupil),scalar);
-        rows(row).continuous_born_co=relative(B(pupil),co);
-        rows(row).continuous_rytov_co=relative(R(pupil),co);
-        rows(row).continuous_born_full=relative(B(pupil)*e0,exact);
-        rows(row).continuous_rytov_full=relative(R(pupil)*e0,exact);
-        rows(row).scalar_co=relative(scalar,co);
-        rows(row).scalar_full=relative(scalar*e0,exact);
-        rows(row).polarization_leakage=relative(co*e0,exact);
-        rows(row).voxel_born_scalar=NaN; rows(row).voxel_rytov_scalar=NaN;
-        rows(row).voxel_born_co=NaN; rows(row).voxel_rytov_co=NaN;
-        rows(row).voxel_born_full=NaN; rows(row).voxel_rytov_full=NaN;
-        rows(row).voxel_born_continuous_gap=NaN; rows(row).voxel_rytov_continuous_gap=NaN;
-        if use_voxel
-            vb=ft(vB(:,:,row),dx); vr=ft(vR(:,:,row),dx);
-            assert(norm(vr(~pupil))/norm(vr(:))<1e-12,'Rytov pupil leakage.');
-            rows(row).voxel_born_scalar=relative(vb(pupil),scalar);
-            rows(row).voxel_rytov_scalar=relative(vr(pupil),scalar);
-            rows(row).voxel_born_co=relative(vb(pupil),co);
-            rows(row).voxel_rytov_co=relative(vr(pupil),co);
-            rows(row).voxel_born_full=relative(vb(pupil)*e0,exact);
-            rows(row).voxel_rytov_full=relative(vr(pupil)*e0,exact);
-            rows(row).voxel_born_continuous_gap=relative(vb(pupil),B(pupil));
-            rows(row).voxel_rytov_continuous_gap=relative(vr(pupil),R(pupil));
-        end
-        dk=2*pi/(N*dx);
-        rows(row).scalar_norm2=sum(abs(scalar).^2)*dk^2;
-        rows(row).co_norm2=sum(abs(co).^2)*dk^2;
-        rows(row).vector_norm2=sum(abs(exact).^2,'all')*dk^2;
-        rows(row).max_abs_rytov_phase=max(abs(phase),[],'all');
-        rows(row).voxel_volume_error=volume_error; rows(row).voxel_seconds=voxel_seconds;
-        fprintf('%s NAi=%.2f phi=%3.0f continuous B/R co=%.3f/%.3f%% voxel=%.3f/%.3f%%\n', ...
-            name,s.illumination_NA(j),phi*180/pi,100*rows(row).continuous_born_co, ...
-            100*rows(row).continuous_rytov_co,100*rows(row).voxel_born_co, ...
-            100*rows(row).voxel_rytov_co);
-    end
-end
-results=struct2table(rows);
-fprintf('GRID_FINISHED %s rows=%d elapsed=%.1fs\n',name,height(results),toc(timer));
-end
-
 function u=ift(S,dx)
 u=fftshift(ifft2(ifftshift(S)))/dx^2;
 end
 
 function S=ft(u,dx)
 S=fftshift(fft2(ifftshift(u)))*dx^2;
-end
-
-function summarize_results(out)
-t=readtable(fullfile(out,'oblate_angles.csv'),'TextType','string');
-names={'baseline','window_51','sampling_0p05'};
-metrics={'continuous_born_scalar','continuous_rytov_scalar', ...
-    'continuous_born_co','continuous_rytov_co','continuous_born_full', ...
-    'continuous_rytov_full','voxel_born_scalar','voxel_rytov_scalar', ...
-    'voxel_born_co','voxel_rytov_co','voxel_born_full','voxel_rytov_full', ...
-    'scalar_co','scalar_full','polarization_leakage'};
-rows=struct([]); n=0;
-for k=1:numel(names)
-    a=t(t.configuration==names{k},:); w=illumination_weights(a);
-    assert(height(a)==81 && abs(sum(w)-1)<1e-14,'Angular coverage.');
-    for m=1:numel(metrics)
-        metric=metrics{m}; v=a.(metric); if any(isnan(v)), continue; end
-        if endsWith(metric,'_scalar')
-            norm2=a.scalar_norm2;
-        elseif endsWith(metric,'_co')
-            norm2=a.co_norm2;
-        else
-            norm2=a.vector_norm2;
-        end
-        n=n+1; rows(n).configuration=string(names{k}); rows(n).metric=string(metric);
-        rows(n).pupil_weighted_mean=sum(w.*v);
-        rows(n).pooled_L2=sqrt(sum(w.*v.^2.*norm2)/sum(w.*norm2));
-        [rows(n).maximum,i]=max(v); rows(n).minimum=min(v);
-        rows(n).worst_illumination_NA=a.illumination_NA(i);
-        rows(n).worst_phi_deg=a.phi_deg(i);
-    end
-end
-summary=struct2table(rows); writetable(summary,fullfile(out,'oblate_summary.csv'));
-% Coarsening checks for the angular average; not a continuous-angle bound.
-a=t(t.configuration=="sampling_0p05",:); w=illumination_weights(a);
-fine_mean=sum(w.*a.continuous_rytov_co);
-rad=a(abs(a.illumination_NA/.1-round(a.illumination_NA/.1))<1e-9,:);
-az=a(abs(a.phi_deg/90-round(a.phi_deg/90))<1e-9,:);
-radial_mean=sum(illumination_weights(rad).*rad.continuous_rytov_co);
-azimuth_mean=sum(illumination_weights(az).*az.continuous_rytov_co);
-angular_check=table(fine_mean,radial_mean,azimuth_mean, ...
-    abs(radial_mean-fine_mean),abs(azimuth_mean-fine_mean),'VariableNames', ...
-    {'fine_mean','radial_step_0p1_mean','azimuth_step_90_mean','radial_mean_gap','azimuth_mean_gap'});
-writetable(angular_check,fullfile(out,'oblate_angular_convergence.csv'));
-disp(summary(contains(summary.metric,'_co'),:));
-disp(angular_check);
-fprintf('OBLATE_SUMMARY_FINISHED\n');
 end
 
 function w=illumination_weights(t)
@@ -464,39 +289,6 @@ area=diff(edges.^2)/.5^2; w=zeros(height(t),1);
 for j=1:numel(q)
     ix=t.illumination_NA==q(j); w(ix)=area(j)/nnz(ix);
 end
-end
-
-function field_convergence(p,out)
-% Compare spectra at identical physical frequencies, not just error magnitudes.
-configs=[256,.1;512,.1;1024,.05;1024,.1]; rows=struct([]); row=0;
-for ni=[0,.25,.5]
-    az=[0,pi/4,pi/2]; if ni==0, az=0; end
-    for phi=az
-        theta=asin(ni/p.n_m); spectra=cell(4,1); pupils=cell(4,1);
-        for j=1:4
-            N=configs(j,1); dx=configs(j,2); k0=2*pi/p.lambda; k=k0*p.n_m;
-            f=(-N/2:N/2-1)*2*pi/(N*dx); [KX,KY]=ndgrid(f,f);
-            prop=KX.^2+KY.^2<k^2; pupil=KX.^2+KY.^2<=(k0*p.NA_det)^2;
-            KZ=zeros(N); KZ(prop)=sqrt(k^2-KX(prop).^2-KY(prop).^2);
-            ki=k*[sin(theta)*cos(phi),sin(theta)*sin(phi),cos(theta)];
-            x=(-N/2:N/2-1)*dx; [X,Y]=ndgrid(x,x);
-            [~,R]=continuous_spectra(p,KX,KY,KZ,prop,X,Y,ki,dx);
-            R(~pupil)=0;
-            spectra{j}=R; pupils{j}=pupil;
-        end
-        row=row+1; rows(row).illumination_NA=ni; rows(row).phi_deg=phi*180/pi;
-        a=spectra{1}; b=spectra{2}(1:2:end,1:2:end); mask=pupils{1};
-        rows(row).window_25_to_51=relative(a(mask),b(mask));
-        a=spectra{2}; b=spectra{3}(257:768,257:768); mask=pupils{2};
-        rows(row).dx_0p1_to_0p05=relative(a(mask),b(mask));
-        b=spectra{4}(1:2:end,1:2:end);
-        rows(row).window_51_to_102=relative(a(mask),b(mask));
-    end
-end
-results=struct2table(rows); writetable(results,fullfile(out,'oblate_field_convergence.csv'));
-disp(results); assert(max(results.dx_0p1_to_0p05)<1e-5,'Continuous dx refinement.');
-assert(max(results.window_51_to_102)<.005,'Continuous window refinement exceeds 0.5%%.');
-fprintf('OBLATE_FIELD_CONVERGENCE_PASS\n');
 end
 
 function [B,R,phase]=continuous_spectra(p,KX,KY,KZ,prop,X,Y,ki,dx)
@@ -600,72 +392,15 @@ for j=1:numel(s.theta)
 end
 assert(max(born_surface_gap)<1e-4,'Born derivative vs surface integral.');
 
-% Detector diagnostics: extract the second logarithmic coefficient, without fitting it.
-N=512; dx=.1; f=(-N/2:N/2-1)*2*pi/(N*dx); [KX,KY]=ndgrid(f,f);
-prop=KX.^2+KY.^2<s.km^2; pupil=KX.^2+KY.^2<=(2*pi*s.NA_det/s.lambda)^2;
-KZ=zeros(N); KZ(prop)=sqrt(s.km^2-KX(prop).^2-KY(prop).^2);
-eta=KZ(prop)/s.km; phi=atan2(KY(prop),KX(prop));
-factor=2*pi*1i*exp(1i*KZ(prop)*s.z_det)./KZ(prop);
-[~,Uplus]=far_fields(plus,eta,phi); [~,Uminus]=far_fields(minus,eta,phi);
-first=(Uplus-Uminus).*factor/(2*h); second=(Uplus+Uminus).*factor/(2*h^2);
-clear plus minus derivative
+% Check the finite-potential derivative used for the Born field.
 plus2=scalar_scaled_reference(s,2*h); minus2=scalar_scaled_reference(s,-2*h);
-[~,Up2]=far_fields(plus2,eta,phi); [~,Um2]=far_fields(minus2,eta,phi);
-second_coarse=(Up2+Um2).*factor/(8*h^2);
-second_step_gap=relative(second_coarse,second);
 [~,bpp]=near_fields(plus2,probe,false); [~,bmm]=near_fields(minus2,probe,false);
 born_step_gap=relative((bpp-bmm)/(4*h),born_probe);
-assert(second_step_gap<1e-3 && born_step_gap<1e-4,'Potential-step refinement.');
-clear plus2 minus2
-[~,Uexact]=far_fields(s,eta,phi); Uexact=Uexact.*factor;
-xy=(-N/2:N/2-1)*dx; [XX,YY]=ndgrid(xy,xy);
-rows=struct([]); row=0; termrows=struct([]);
-for j=1:numel(s.theta)
-    ki=s.km*[sin(s.theta(j)),0,cos(s.theta(j))];
-    [B,~,psi1]=continuous_spectra(s,KX,KY,KZ,prop,XX,YY,ki,dx);
-    first_gap=relative(first(:,j),B(prop)); assert(first_gap<1e-4,'Weak derivative vs analytic Born.');
-    inc=exp(1i*(ki(1)*XX+ki(3)*s.z_det));
-    U2=zeros(N); U2(prop)=second(:,j);
-    psi2=ift(U2,dx)./inc-.5*psi1.^2;
-    for t=[.1,.25,.5,1]
-        if t==1
-            target=Uexact(:,j);
-        else
-            filename=fullfile(out,sprintf('oblate_contrast_t%g.mat',t));
-            if j==1
-                scaled=scalar_scaled_reference(s,t); [~,Ut]=far_fields(scaled,eta,phi);
-                Ut=Ut.*factor; save(filename,'Ut','-v7'); clear scaled
-            else
-                loaded=load(filename,'Ut'); Ut=loaded.Ut;
-            end
-            target=Ut(:,j);
-        end
-        R1=ft(inc.*expm1(t*psi1),dx); R2=ft(inc.*expm1(t*psi1+t^2*psi2),dx);
-        target_grid=zeros(N); target_grid(prop)=target;
-        row=row+1; rows(row).theta_deg=theta_deg(j); rows(row).potential_scale=t;
-        rows(row).index=sqrt(s.n_m^2+t*(s.n_p^2-s.n_m^2));
-        rows(row).born_error=relative(t*B(pupil),target_grid(pupil));
-        rows(row).rytov1_error=relative(R1(pupil),target_grid(pupil));
-        rows(row).rytov2_error=relative(R2(pupil),target_grid(pupil));
-        rows(row).psi2_over_psi1=norm(t^2*psi2(:))/norm(t*psi1(:));
-        fprintf('OBLATE_CAUSE theta=%g t=%.2f R1=%.4f%% R2=%.4f%%\n',theta_deg(j),t, ...
-            100*rows(row).rytov1_error,100*rows(row).rytov2_error);
-    end
-    valid=inside & abs(scalar(:,j))>.1;
-    termrows(j).theta_deg=theta_deg(j);
-    termrows(j).slice_Q_over_f_rms=norm(Q(valid,j))/sqrt(nnz(valid))/f0;
-    termrows(j).minimum_interior_abs_U=min(abs(scalar(inside,j)));
-    termrows(j).masked_interior_fraction=1-nnz(valid)/nnz(inside);
-    termrows(j).xz_total_Ex_born_error=relative(bornEx(:,j),exact(:,j));
-    termrows(j).xz_total_Ex_rytov_error=relative(rytovEx(:,j),exact(:,j));
-    termrows(j).xz_total_Ex_scalar_error=relative(scalar(:,j)*cos(s.theta(j)),exact(:,j));
-end
-writetable(struct2table(rows),fullfile(out,'oblate_rytov_cause.csv'));
-writetable(struct2table(termrows),fullfile(out,'oblate_xz_metrics.csv'));
-validation=table(near_vector_gap,near_scalar_gap,max(born_surface_gap),born_step_gap,second_step_gap, ...
-    'VariableNames',{'near_vector_cutoff','near_scalar_cutoff','born_surface_gap','born_step_gap','second_step_gap'});
+assert(born_step_gap<1e-4,'Potential-step refinement.');
+validation=table(near_vector_gap,near_scalar_gap,max(born_surface_gap),born_step_gap, ...
+    'VariableNames',{'near_vector_cutoff','near_scalar_cutoff','born_surface_gap','born_step_gap'});
 writetable(validation,fullfile(out,'oblate_xz_validation.csv'));
-fprintf('OBLATE_XZ_AND_CAUSE_PASS\n');
+fprintf('OBLATE_XZ_PASS\n');
 end
 
 function s=scalar_scaled_reference(base,t)

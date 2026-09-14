@@ -1,7 +1,7 @@
-function summary = run_inverse_experiment(name, opts)
+function summary = run_inverse_experiment(name, opts, methods)
 %RUN_INVERSE_EXPERIMENT Saved, independently generated low-contrast ODT study.
-% Examples: run_inverse_experiment('baseline');
-% run_inverse_experiment('matched',struct('source','matched'));
+% run_project('inverse') reproduces the retained configurations.
+% Optional methods selects a subset without changing saved solver settings.
 % The true support is used ONLY for error metrics and the labeled control.
 if nargin<1, name='baseline'; end
 if nargin<2, opts=struct; end
@@ -17,6 +17,11 @@ for key=fieldnames(opts).', cfg.(key{1})=opts.(key{1}); end
 cfg.source=validatestring(cfg.source,{'exact','matched'});
 validateattributes(cfg.rho,{'numeric'},{'real','finite','scalar','positive'});
 assert(all(ismember(cfg.methods,{'direct','gp','tv'})),'Unknown reconstruction method.');
+if nargin<3, methods=cfg.methods; end
+assert(iscell(methods) && isrow(methods) && ~isempty(methods) && ...
+    all(cellfun(@(m) ischar(m) && isrow(m),methods)) && ...
+    numel(unique(methods))==numel(methods) && all(ismember(methods,cfg.methods)), ...
+    'Select distinct methods from the saved configuration.');
 here=fileparts(mfilename('fullpath')); addpath(here);
 out=fullfile(here,'results'); if ~isfolder(out), mkdir(out); end
 % Validate a reused label before touching any of its report artifacts.
@@ -100,7 +105,7 @@ geometry_file=fullfile(out,[name,'_geometry.mat']);
 save(geometry_file,'x','y','z','truth','coverage_xz','coverage_xy','axis_qx','axis_qz', ...
     'cfg','truth_mismatch','alpha','physical_normalization','nm','np','-v7');
 rows=struct([]);
-for method_cell=cfg.methods
+for method_cell=methods
     method=method_cell{1}; filename=fullfile(out,[name,'_',method,'.mat']);
     if isfile(filename)
         loaded=load(filename,'R'); R=loaded.R;
@@ -151,7 +156,7 @@ for method_cell=cfg.methods
         100*R.metric.ewald_residual,R.metric.converged);
     clear R n chi prediction predicted reference
 end
-assert(height(summary)==numel(cfg.methods) && all(isfinite(summary.relative_ri_error)), ...
+assert(height(summary)==numel(methods) && all(isfinite(summary.relative_ri_error)), ...
     'Incomplete or nonfinite reconstruction results.');
 disp(summary);
 fprintf('INVERSE_EXPERIMENT_PASS %s\n',name);
