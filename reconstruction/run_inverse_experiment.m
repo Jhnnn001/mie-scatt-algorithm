@@ -5,7 +5,7 @@ function summary = run_inverse_experiment(name, opts, methods)
 % The true support is used ONLY for error metrics and the labeled control.
 if nargin<1, name='baseline'; end
 if nargin<2, opts=struct; end
-assert(ischar(name) && ~isempty(regexp(name,'^[a-z0-9_]+$','once')),'Use a simple run label.');
+assert(ischar(name) && ~isempty(regexp(name,'^[a-z0-9_-]+$','once')),'Use a simple run label.');
 defaults=struct('source','exact','grid_size',[128,128,80],'dx',.1,'padding',2, ...
     'gp_iter',40,'tv_inner',100,'outer_iter',5,'alpha_relative',4, ...
     'tol',1e-4,'cg_tol',1e-4,'cg_max_iter',50,'discrepancy',.01, ...
@@ -23,10 +23,11 @@ assert(iscell(methods) && isrow(methods) && ~isempty(methods) && ...
     numel(unique(methods))==numel(methods) && all(ismember(methods,cfg.methods)), ...
     'Select distinct methods from the saved configuration.');
 here=fileparts(mfilename('fullpath')); addpath(here);
-out=fullfile(here,'results'); if ~isfolder(out), mkdir(out); end
+results_dir=fullfile(here,'results');
+out=fullfile(results_dir,name); if ~isfolder(out), mkdir(out); end
 % Validate a reused label before touching any of its report artifacts.
 for prior={'geometry','direct','gp','tv'}
-    filename=fullfile(out,[name,'_',prior{1},'.mat']);
+    filename=fullfile(out,[prior{1},'.mat']);
     if isfile(filename)
         if strcmp(prior{1},'geometry'), saved=load(filename,'cfg');
         else, saved=load(filename,'R'); end
@@ -37,10 +38,10 @@ for prior={'geometry','direct','gp','tv'}
         assert(isequal(orderfields(previous),orderfields(cfg)),'Existing run settings differ; use a new label.');
     end
 end
-logfile=fullfile(out,[name,'.log']); diary(logfile); cleanup=onCleanup(@() diary('off'));
+logfile=fullfile(out,'run.log'); diary(logfile); cleanup=onCleanup(@() diary('off'));
 fprintf('INVERSE_RUN %s source=%s padding=%g grid=%s dx=%g\n', ...
     name,cfg.source,cfg.padding,mat2str(cfg.grid_size),cfg.dx);
-cache=fullfile(out,'exact_detector_512.mat');
+cache=fullfile(results_dir,'exact_detector_512.mat');
 rebuild_cache=~isfile(cache);
 if ~rebuild_cache
     loaded=load(cache,'raw'); raw=loaded.raw;
@@ -51,7 +52,7 @@ if ~rebuild_cache
         numel(gg.kx)==512 && numel(gg.ky)==512 && size(gg.k_incident,1)==81 && ...
         size(raw.co_spectrum,2)==81 && numel(raw.samples)==81*nnz(gg.pupil), ...
         'Wrong measurement cache.');
-    expected_angles=readtable(fullfile(here,'..','spheroid-analytic-forward','2','case_3_angles.csv'));
+    expected_angles=readtable(fullfile(here,'..','experiments','contrast-sweep','contrast_1_percent_angles.csv'));
     assert(isequal(raw.angles,expected_angles),'Cached illumination/order differs from the validated study.');
     rebuild_cache=~isfield(raw,'preparation_version');
     if ~rebuild_cache, assert(raw.preparation_version==2,'Unsupported measurement preparation version.'); end
@@ -101,12 +102,12 @@ coverage_xz=squeeze(coverage(:,size(coverage,2)/2+1,:));
 coverage_xy=coverage(:,:,size(coverage,3)/2+1); clear coverage
 axis_qx=(-sz(1)/2:sz(1)/2-1)*2*pi/(sz(1)*cfg.dx);
 axis_qz=(-sz(3)/2:sz(3)/2-1)*2*pi/(sz(3)*cfg.dx);
-geometry_file=fullfile(out,[name,'_geometry.mat']);
+geometry_file=fullfile(out,'geometry.mat');
 save(geometry_file,'x','y','z','truth','coverage_xz','coverage_xy','axis_qx','axis_qz', ...
     'cfg','truth_mismatch','alpha','physical_normalization','nm','np','-v7');
 rows=struct([]);
 for method_cell=methods
-    method=method_cell{1}; filename=fullfile(out,[name,'_',method,'.mat']);
+    method=method_cell{1}; filename=fullfile(out,[method,'.mat']);
     if isfile(filename)
         loaded=load(filename,'R'); R=loaded.R;
         if ~isfield(R.config,'rho'), R.config.rho=.1; end
@@ -137,7 +138,7 @@ for method_cell=methods
         save(filename,'R','-v7');
         history=array2table(info.history,'VariableNames', ...
             {'outer','inner','objective','data_residual','primal_or_step','dual','cg_residual','cg_iterations'});
-        writetable(history,fullfile(out,[name,'_',method,'_history.csv']));
+        writetable(history,fullfile(out,[method,'_history.csv']));
     end
     if ~strcmp(method,'tv') && ~isnan(R.metric.stationarity)
         R.metric.stationarity=NaN; R.info.stationarity_residual=NaN;
@@ -150,7 +151,7 @@ for method_cell=methods
     save(filename,'R','-v7');
     rows=[rows;R.metric]; %#ok<AGROW>
     summary=struct2table(rows);
-    writetable(summary,fullfile(out,[name,'_metrics.csv']));
+    writetable(summary,fullfile(out,'metrics.csv'));
     fprintf('%s COMPLETE RI=%.5f%% field=%.5f%% data=%.5f%% converged=%d\n', ...
         method,100*R.metric.relative_ri_error,100*R.metric.physical_scattered_field_error, ...
         100*R.metric.ewald_residual,R.metric.converged);

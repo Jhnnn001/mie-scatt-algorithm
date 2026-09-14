@@ -1,17 +1,17 @@
-function parameter_sweep(project,out)
-%PARAMETER_SWEEP Shared, checkpointed size/contrast study. All lengths in um.
+function run_parameter_sweep(project,out)
+%RUN_PARAMETER_SWEEP Shared, checkpointed size/contrast study. All lengths in um.
 assert(ismember(project,{'size','contrast'}),'Unknown experiment.');
 root=fileparts(fileparts(out));
-addpath(fullfile(root,'forward','exp'),fullfile(root,'spheroid-analytic-forward'));
-api=oblate_na_sweep('helpers');
-oblate_na_sweep('check');
+addpath(fullfile(root,'experiments','field-analysis'),fullfile(root,'maxwell-solver'));
+api=oblate_field_analysis('helpers');
+oblate_field_analysis('check');
 p=struct('lambda',.532,'n_m',1.335381534,'n_p',1.365,'a',3,'b',5, ...
     'NA_det',1,'z_det',5,'illumination_NA',(0:.05:.5).');
 p.theta=asin(p.illumination_NA/p.n_m);
 if strcmp(project,'size'), factors=[1,.1,.01]; else, factors=[1,.5,.01]; end
 allrows=table; allchecks=table; configs=struct([]);
 for ic=1:3
-    q=p; factor=factors(ic); name=sprintf('case_%d',ic);
+    q=p; factor=factors(ic); name=sprintf('%s_%g_percent',project,100*factor);
     if strcmp(project,'size')
         q.a=p.a*factor; q.b=p.b*factor;
         orders=[114,59;36,18;40,14]; L=orders(ic,1); M=orders(ic,2);
@@ -34,8 +34,8 @@ for ic=1:3
         check=readtable(validation);
     else
         if factor==1
-            high=load(fullfile(root,'forward','exp','oblate_reference_1.mat'),'s'); s=high.s;
-            low=load(fullfile(root,'forward','exp','oblate_reference_0.mat'),'s'); low=low.s;
+            high=load(fullfile(root,'experiments','field-analysis','oblate_reference_fine.mat'),'s'); s=high.s;
+            low=load(fullfile(root,'experiments','field-analysis','oblate_reference_coarse.mat'),'s'); low=low.s;
             assert(isequal(s.parameters,q),'Original reference parameters differ.');
             public_gap=s.public_far_gap;
         else

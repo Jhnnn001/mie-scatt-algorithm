@@ -10,23 +10,23 @@ validateattributes(detector_dx,{'numeric'},{'real','finite','scalar','positive'}
 validateattributes(indices,{'numeric'},{'integer','finite','vector','>=',1,'<=',81});
 assert(mod(N,2)==0 && numel(unique(indices))==numel(indices),'Even detector, unique directions required.');
 root=fileparts(fileparts(mfilename('fullpath')));
-reference_dir=fullfile(root,'spheroid-analytic-forward','2');
-addpath(fullfile(root,'forward','exp'),fullfile(root,'spheroid-analytic-forward'));
-checks=readtable(fullfile(reference_dir,'case_3_reference_validation.csv'));
+reference_dir=fullfile(root,'experiments','contrast-sweep');
+addpath(fullfile(root,'experiments','field-analysis'),fullfile(root,'maxwell-solver'));
+checks=readtable(fullfile(reference_dir,'contrast_1_percent_reference_validation.csv'));
 assert(height(checks)==1 && checks.case_id==3 && ...
     all(isfinite(checks{1,2:end})) && max(checks{1,2:5})<1e-6 && ...
     checks.public_far_gap<1e-5,'Unvalidated exact reference.');
-loaded=load(fullfile(reference_dir,'case_3_reference.mat'),'s'); s=loaded.s;
+loaded=load(fullfile(reference_dir,'contrast_1_percent_reference.mat'),'s'); s=loaded.s;
 assert(s.a==3 && s.b==5 && s.NA_det==1 && s.z_det==5 && ...
     abs(s.n_m-1.335381534)<1e-12 && abs(s.n_p-1.33567771866)<1e-12, ...
     'The selected reference is not the approved delta-n/100 system.');
-angles=readtable(fullfile(reference_dir,'case_3_angles.csv'));
+angles=readtable(fullfile(reference_dir,'contrast_1_percent_angles.csv'));
 assert(height(angles)==81 && all(angles.case_id==3) && ...
     all(isfinite(angles{:,2:end}),'all') && ...
     height(unique(angles(:,{'illumination_NA','phi_deg'})))==81, ...
     'Incomplete or invalid illumination data.');
 all_weights=zeros(81,1);
-api=oblate_na_sweep('helpers'); all_weights(:)=api.weights(angles);
+api=oblate_field_analysis('helpers'); all_weights(:)=api.weights(angles);
 angles=angles(indices,:); weights=all_weights(indices); weights=weights/sum(weights);
 k=s.km; k0=2*pi/s.lambda;
 assert(pi/detector_dx>k0*s.NA_det,'Detector Nyquist violation.');

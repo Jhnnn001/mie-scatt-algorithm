@@ -3,15 +3,17 @@ function run_project(stage)
 if nargin==0, stage='check'; end
 stage=validatestring(stage,{'check','forward','fields','inverse'});
 root=fileparts(mfilename('fullpath'));
-addpath(fullfile(root,'spheroid-analytic-forward'), ...
-    fullfile(root,'spheroid-analytic-forward','1'), ...
-    fullfile(root,'spheroid-analytic-forward','2'), ...
-    fullfile(root,'forward'),fullfile(root,'forward','exp'), ...
-    fullfile(root,'inverse'));
+addpath(fullfile(root,'maxwell-solver'), ...
+    fullfile(root,'born-rytov'),fullfile(root,'reconstruction'), ...
+    fullfile(root,'experiments'), ...
+    fullfile(root,'experiments','prolate-baseline'), ...
+    fullfile(root,'experiments','size-sweep'), ...
+    fullfile(root,'experiments','contrast-sweep'), ...
+    fullfile(root,'experiments','field-analysis'));
 switch stage
     case 'check'
-        addpath(fullfile(root,'spheroid-analytic-forward','tests'), ...
-            fullfile(root,'forward','tests'),fullfile(root,'inverse','tests'));
+        addpath(fullfile(root,'maxwell-solver','tests'), ...
+            fullfile(root,'born-rytov','tests'),fullfile(root,'reconstruction','tests'));
         test_gauss_legendre;
         test_incident_plane_wave;
         test_sph_coords;
@@ -22,26 +24,25 @@ switch stage
         test_inverse;
         test_matched_inverse;
         test_exact_data;
-        oblate_na_sweep('check');
+        oblate_field_analysis('check');
     case 'forward'
-        addpath(fullfile(root,'forward','tests'));
-        analyze_rytov_spheroid;
-        oblate_na_sweep('reference');
+        run_prolate_baseline;
+        oblate_field_analysis('reference');
         run_size_experiment;
         run_contrast_experiment;
     case 'fields'
-        oblate_na_sweep('xz');
-        oblate_na_sweep('xz_validate');
+        oblate_field_analysis('xz');
+        oblate_field_analysis('xz_validate');
     case 'inverse'
         base=struct('padding',8,'gp_iter',100,'tv_inner',200,'cg_max_iter',100);
-        run_inverse_experiment('padding8',base,{'direct','gp'});
+        run_inverse_experiment('maxwell-direct-gp',base,{'direct','gp'});
         control=base; control.padding=4; control.source='matched';
-        run_inverse_experiment('linear_control',control);
+        run_inverse_experiment('matched-control',control);
         tv=base; tv.methods={'tv'}; tv.tv_inner=1000;
         tv.tol=1e-5; tv.cg_tol=1e-5;
         % Archived penalty after matching the padding-4/8 physical normalization.
         tv.rho=0.003161909279393483;
-        run_inverse_experiment('tv_strict',tv);
+        run_inverse_experiment('maxwell-tv',tv);
         check_inverse_sampling;
 end
 fprintf('PROJECT_STAGE_PASS %s\n',stage);

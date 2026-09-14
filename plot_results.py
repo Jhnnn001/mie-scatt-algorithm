@@ -9,20 +9,19 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 
-HERE = Path(__file__).resolve().parent
-SRC = HERE
-FIGURES = HERE / "results"
+ROOT = Path(__file__).resolve().parent
+FIGURES = ROOT / "figures"
 FIGURES.mkdir(exist_ok=True)
-FIELDS = SRC / "forward" / "exp" / "oblate_xz_fields.mat"
-EXACT = SRC / "forward" / "exp" / "oblate_xz_exact.mat"
-SWEEP = SRC / "spheroid-analytic-forward"
-RESULTS = SRC / "inverse" / "results"
-RECON = [("padding8", "direct"), ("padding8", "gp"), ("tv_strict", "tv")]
+EXPERIMENTS = ROOT / "experiments"
+FIELDS = EXPERIMENTS / "field-analysis" / "oblate_xz_fields.mat"
+EXACT = EXPERIMENTS / "field-analysis" / "oblate_xz_exact.mat"
+RESULTS = ROOT / "reconstruction" / "results"
+RECON = [("maxwell-direct-gp", "direct"), ("maxwell-direct-gp", "gp"), ("maxwell-tv", "tv")]
 
 plt.rcParams.update({"font.size": 8, "savefig.dpi": 200, "axes.linewidth": 0.6})
 
 
-def fig1_forward():
+def plot_forward_fields():
     d = loadmat(FIELDS, simplify_cells=True)
     x, z, theta = d["x"], d["z"], d["theta_deg"]
     shape = (len(x), len(z))
@@ -62,11 +61,11 @@ def fig1_forward():
             if j == 5:
                 fig.colorbar(im, ax=axes[i, :], shrink=0.9, pad=0.01,
                              label="|E$_x$| / |E$_0$|" if i == 0 else "phase (rad)")
-    fig.savefig(FIGURES / "fig1-forward.png")
+    fig.savefig(FIGURES / "forward_fields.png")
     plt.close(fig)
 
 
-def fig2_Q():
+def plot_rytov_nonlinear_term():
     """Plot the omitted logarithmic-gradient term at normal incidence."""
     d = loadmat(EXACT, simplify_cells=True)
     x, z = d["x"], d["z"]
@@ -86,18 +85,18 @@ def fig2_Q():
     ax.set_xticks([-5, 0, 5]); ax.set_yticks([-3, 0, 3])
     ax.set_xlabel("x (μm)"); ax.set_ylabel("z (μm)")
     fig.colorbar(im, ax=ax, shrink=0.85, pad=0.03, label="|Q| / |f|")
-    fig.savefig(FIGURES / "fig2-Q.png")
+    fig.savefig(FIGURES / "rytov_nonlinear_term.png")
     plt.close(fig)
 
 
-def fig3_size_contrast():
-    """Mean Born/Rytov error over 81 directions vs. size factor (1/) and Δn factor (2/)."""
+def plot_size_contrast_errors():
+    """Mean Born/Rytov error over 81 directions vs. size and index-contrast factors."""
     fig, axes = plt.subplots(1, 2, figsize=(5.6, 2.4), layout="constrained")
-    for ax, sub, xl in zip(axes, ("1", "2"), ("size factor", "Δn factor")):
+    for ax, sub, xl in zip(axes, ("size-sweep", "contrast-sweep"), ("size factor", "Δn factor")):
         fac = {r["case_id"]: float(r["factor"])
-               for r in csv.DictReader(open(SWEEP / sub / "parameters.csv"))}
+               for r in csv.DictReader(open(EXPERIMENTS / sub / "parameters.csv"))}
         err = {}
-        for r in csv.DictReader(open(SWEEP / sub / "summary.csv")):
+        for r in csv.DictReader(open(EXPERIMENTS / sub / "summary.csv")):
             err.setdefault(r["metric"], {})[fac[r["case_id"]]] = 100 * float(r["mean_error"])
         for metric, style, lab in (("born_scalar", "o-", "Born"), ("rytov_scalar", "s-", "Rytov")):
             xs = sorted(err[metric])
@@ -105,12 +104,12 @@ def fig3_size_contrast():
         ax.set_xlabel(xl); ax.set_ylabel("relative error (%)")
         ax.grid(True, which="both", lw=0.3, alpha=0.5)
     axes[1].legend(loc="upper left", frameon=False, fontsize=7)
-    fig.savefig(FIGURES / "fig3-size-contrast.png")
+    fig.savefig(FIGURES / "size_contrast_errors.png")
     plt.close(fig)
 
 
-def fig4_reconstruction():
-    g = loadmat(RESULTS / "padding8_geometry.mat", simplify_cells=True)
+def plot_reconstruction():
+    g = loadmat(RESULTS / "maxwell-direct-gp" / "geometry.mat", simplify_cells=True)
     truth, nm = g["truth"], float(g["nm"])
     delta = float(g["np"]) - nm
     x, y, z = g["x"], g["y"], g["z"]
@@ -120,9 +119,9 @@ def fig4_reconstruction():
     ext_xz = [x[0] - dx/2, x[-1] + dx/2, z[0] - dx/2, z[-1] + dx/2]
     vols = []
     for label, method in RECON:
-        assert np.array_equal(loadmat(RESULTS / f"{label}_geometry.mat",
+        assert np.array_equal(loadmat(RESULTS / label / "geometry.mat",
                                       simplify_cells=True)["truth"], truth)
-        vols.append((loadmat(RESULTS / f"{label}_{method}.mat", simplify_cells=True)["R"]["n"] - nm) / delta)
+        vols.append((loadmat(RESULTS / label / f"{method}.mat", simplify_cells=True)["R"]["n"] - nm) / delta)
     vmin = min(0.0, min(float(v.min()) for v in vols))
     vmax = max(float(v.max()) for v in vols)
     tb = (truth - nm) / delta
@@ -144,21 +143,21 @@ def fig4_reconstruction():
                 ax.set_title(("Direct", "GP", "TV")[j])
             else: ax.set_xlabel("x (μm)")
     fig.colorbar(im, ax=axes, shrink=0.9, pad=0.02, label="(n − n$_m$) / Δn")
-    fig.savefig(FIGURES / "fig4-reconstruction.png")
+    fig.savefig(FIGURES / "reconstruction.png")
     plt.close(fig)
 
 
 
 def verify_results():
     """Catch wrong case selection, corrupted volumes, and unreported nonconvergence."""
-    for label in ("padding8", "tv_strict", "linear_control"):
-        g = loadmat(RESULTS / f"{label}_geometry.mat", simplify_cells=True)
+    for label in ("maxwell-direct-gp", "maxwell-tv", "matched-control"):
+        g = loadmat(RESULTS / label / "geometry.mat", simplify_cells=True)
         truth, nm = g["truth"], float(g["nm"])
-        with (RESULTS / f"{label}_metrics.csv").open() as stream:
+        with (RESULTS / label / "metrics.csv").open() as stream:
             rows = list(csv.DictReader(stream))
         for row in rows:
             method = row["method"]
-            r = loadmat(RESULTS / f"{label}_{method}.mat", simplify_cells=True)["R"]
+            r = loadmat(RESULTS / label / f"{method}.mat", simplify_cells=True)["R"]
             n = r["n"]
             assert n.shape == truth.shape and np.isfinite(n).all()
             error = np.linalg.norm(n - truth) / np.linalg.norm(truth - nm)
@@ -174,14 +173,14 @@ def verify_results():
     assert np.isclose(q.max(), 14.32723618, rtol=1e-6)
     assert np.isclose(d["x"][ix], 0) and np.isclose(d["z"][iz], -0.2)
     print(f"Interior |Q|/|f| maximum: {q.max():.6f} at (x,z)=(0,-0.2) um")
-    for sub in ("1", "2"):
-        with (SWEEP / sub / "summary.csv").open() as stream:
+    for sub in ("size-sweep", "contrast-sweep"):
+        with (EXPERIMENTS / sub / "summary.csv").open() as stream:
             rows = list(csv.DictReader(stream))
         values = {(int(r["case_id"]), r["metric"]): float(r["mean_error"]) for r in rows}
         assert np.isclose(100*values[1, "born_co"], 91.31903, atol=1e-4)
         assert np.isclose(100*values[1, "rytov_co"], 10.50928, atol=1e-4)
         assert values[3, "born_scalar"] < .01 and values[3, "rytov_scalar"] < .01
-    with (SRC / "forward/tests/rytov_analysis.csv").open() as stream:
+    with (EXPERIMENTS / "prolate-baseline" / "forward_errors.csv").open() as stream:
         row = next(csv.DictReader(stream))
     assert np.isclose(100*float(row["born_error"]), 197.55961, atol=1e-4)
     assert np.isclose(100*float(row["corrected_rytov_error"]), 25.73520, atol=1e-4)
@@ -189,8 +188,8 @@ def verify_results():
 
 if __name__ == "__main__":
     verify_results()
-    fig1_forward()
-    fig2_Q()
-    fig3_size_contrast()
-    fig4_reconstruction()
+    plot_forward_fields()
+    plot_rytov_nonlinear_term()
+    plot_size_contrast_errors()
+    plot_reconstruction()
     print("RESULTS_AND_FIGURES_PASS")

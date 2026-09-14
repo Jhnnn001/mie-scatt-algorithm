@@ -1,7 +1,7 @@
 function data = odt_prepare(U, u0, geom, model, opts)
 %ODT_PREPARE Physical detector fields -> nonuniform Fourier samples of chi.
 % chi = n^2/n_m^2 - 1 is REAL (nonabsorbing, isotropic sample).
-% geom is the info returned by forward/born_rytov_voxel. U and u0 have
+% geom is the info returned by born-rytov/born_rytov_voxel. U and u0 have
 % size NdetX-by-NdetY-by-Nillum. model is 'born' or 'rytov'.
 % geom.grid_size and geom.dx specify the reconstruction volume; optional
 % geom.detector_dx specifies a different detector pitch (default geom.dx).

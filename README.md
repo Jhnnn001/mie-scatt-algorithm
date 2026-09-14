@@ -41,7 +41,7 @@ python plot_results.py
 The slower literature benchmark is available separately (about 27 minutes in the recorded original run):
 
 ```sh
-matlab -nojvm -batch "addpath('spheroid-analytic-forward','spheroid-analytic-forward/tests'); test_barton2001"
+matlab -nojvm -batch "addpath('maxwell-solver','maxwell-solver/tests'); test_barton2001"
 ```
 
 Reproduce the experiments:
@@ -53,11 +53,31 @@ matlab -nojvm -batch "run_project('inverse')"  # Direct, GP, TV, and matched-dat
 python plot_results.py
 ```
 
-The runs reuse validated checkpoints, regenerate missing caches, and refresh CSVs; to recalculate an inverse volume, remove only its `<run>_<method>.mat` checkpoint before running the inverse stage.
-The cited volumes are `padding8_direct.mat`, `padding8_gp.mat`, and `tv_strict_tv.mat` under `inverse/results/`; `linear_control_*` contains data generated with the same discrete operator used for reconstruction.
-Fresh inverse solves take minutes per method; figures are written to `results/`.
+The runs reuse validated checkpoints, regenerate missing caches, and refresh CSVs; to recalculate an inverse volume, remove only its `<method>.mat` checkpoint from the corresponding run folder before running the inverse stage.
+The cited volumes are `maxwell-direct-gp/direct.mat`, `maxwell-direct-gp/gp.mat`, and `maxwell-tv/tv.mat` under `reconstruction/results/`; `matched-control/` uses data generated with the same discrete operator used for reconstruction.
+Fresh inverse solves take minutes per method; figures are written to `figures/`.
 
-`spheroid-analytic-forward/` contains the Maxwell solver and the size (`1/`) and contrast (`2/`) experiments; `forward/` contains Born/Rytov models and field analysis; `inverse/` contains Ewald sampling, its adjoint, reconstruction, and retained volumes.
+## Project structure
+
+```text
+maxwell-solver/             Full-vector spheroid solver and validation tests
+born-rytov/                 Born/Rytov forward models and tests
+experiments/
+  prolate-baseline/         Resume baseline and forward error table
+  size-sweep/               Semiaxis scales of 100%, 10%, and 1%
+  contrast-sweep/           Index-contrast scales of 100%, 50%, and 1%
+  field-analysis/           Exact/Born/Rytov fields and the omitted Q term
+  run_parameter_sweep.m     Shared size/contrast experiment runner
+reconstruction/            Ewald sampling, inverse solvers, and tests
+  results/
+    maxwell-direct-gp/      Direct and GP results from Maxwell data
+    maxwell-tv/             TV result from Maxwell data
+    matched-control/       Direct/GP/TV results from the discrete forward model
+figures/                   Four generated result figures
+```
+
+Sweep filenames identify the physical condition, such as `size_10_percent_angles.csv` and `contrast_1_percent_reference.mat`; percentages refer to the baseline size or index contrast.
+Each reconstruction run contains `geometry.mat`, `metrics.csv`, and the available `direct.mat`, `gp.mat`, or `tv.mat` files with their iteration histories.
 
 ## Results
 
@@ -71,9 +91,9 @@ Fresh inverse solves take minutes per method; figures are written to `results/`.
 
 Forward errors measure the complex scattered field after the detector pupil, using Maxwell `Ex` for the prolate case and the incident-polarization projection for the oblate case; oblate errors are illumination-pupil-weighted means.
 Reconstruction error is `||n_reconstructed − n_true||₂ / ||n_true − n_background||₂` over the full volume.
-In the oblate interior, the omitted Rytov term `Q = ∇ψ · ∇ψ` reaches `|Q|/|f| = 14.33` near the center, consistent with concentrated internal reflections ([details](forward/exp/oblate_Q_mechanism.md)).
+In the oblate interior, the omitted Rytov term `Q = ∇ψ · ∇ψ` reaches `|Q|/|f| = 14.33` near the center, consistent with concentrated internal reflections ([details](experiments/field-analysis/rytov_nonlinear_term.md)).
 
-![Direct, GP, and TV reconstruction](results/fig4-reconstruction.png)
+![Direct, GP, and TV reconstruction](figures/reconstruction.png)
 
 White contours mark the true boundary.
 

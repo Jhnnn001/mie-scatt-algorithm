@@ -1,4 +1,4 @@
-%RUN_ALL Run all verification suites and report every failure.
+%RUN_MAXWELL_TESTS Run all Maxwell verification suites and report every failure.
 
 test_directory = fileparts(mfilename('fullpath'));
 addpath(fileparts(test_directory), test_directory);
@@ -32,7 +32,7 @@ for test_index = 1:numel(test_names)
 end
 
 if ~isempty(failed_names)
-    error('run_all:FailedTests', '%d of %d tests failed: %s.', ...
+    error('run_maxwell_tests:FailedTests', '%d of %d tests failed: %s.', ...
         numel(failed_names), numel(test_names), strjoin(failed_names, ', '));
 end
 fprintf('All %d test suites passed.\n', numel(test_names));

@@ -1,12 +1,13 @@
-function api = oblate_na_sweep(stage)
-%OBLATE_NA_SWEEP Reproducible Born/Rytov experiment, lengths in um.
+function api = oblate_field_analysis(stage)
+%OBLATE_FIELD_ANALYSIS Reproducible Born/Rytov experiment, lengths in um.
 % Stages: 'check', 'reference', 'xz', 'xz_validate'; 'helpers' shares the solver.
 % Experimental batch assembly uses the public solver's bases and equations;
 % its validation is recorded separately from spheroid_solve/info.validated.
 if nargin==0, stage='check'; end
 api=[];
 out=fileparts(mfilename('fullpath'));
-addpath(fileparts(out),fullfile(out,'..','..','spheroid-analytic-forward'));
+root=fileparts(fileparts(out));
+addpath(fullfile(root,'born-rytov'),fullfile(root,'maxwell-solver'));
 p=struct('lambda',.532,'n_m',1.335381534,'n_p',1.365,'a',3,'b',5, ...
     'NA_det',1,'z_det',5,'illumination_NA',(0:.05:.5).');
 p.theta=asin(p.illumination_NA/p.n_m);
@@ -43,8 +44,9 @@ switch stage
         assert(norm(ex-[1,0,0])<1e-14,'Original polarization convention.');
         fprintf('OBLATE_IMPLEMENTATION_CHECKS_PASS public_far_gap=%.3g\n',gap);
     case 'reference'
+        resolution={'coarse','fine'};
         for fine=0:1
-            filename=fullfile(out,sprintf('oblate_reference_%d.mat',fine));
+            filename=fullfile(out,sprintf('oblate_reference_%s.mat',resolution{fine+1}));
             if isfile(filename) && ~isempty(whos('-file',filename,'s'))
                 loaded=load(filename,'s'); s=loaded.s;
                 assert(isequal(s.parameters,p),'Reference checkpoint parameters differ.');
@@ -61,7 +63,7 @@ switch stage
                 save(filename,'s','-v7');
             end
         end
-        low=load(fullfile(out,'oblate_reference_0.mat'),'s');
+        low=load(fullfile(out,'oblate_reference_coarse.mat'),'s');
         [q,w]=gauss_legendre(96); q=(q+1)/2; w=w/2;
         [Q,Phi]=ndgrid(q,2*pi*(0:127)/128);
         eta=sqrt(1-(Q/p.n_m).^2);

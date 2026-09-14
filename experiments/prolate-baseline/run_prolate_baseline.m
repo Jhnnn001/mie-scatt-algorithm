@@ -1,8 +1,9 @@
-function results = analyze_rytov_spheroid
-%ANALYZE_RYTOV_SPHEROID Prolate baseline reported in the resume.
+function results = run_prolate_baseline
+%RUN_PROLATE_BASELINE Prolate baseline reported in the resume.
 % Lengths in um; normal incidence, lab x polarization, detector NA=0.1.
 here=fileparts(mfilename('fullpath'));
-addpath(fileparts(here),fullfile(here,'..','..','spheroid-analytic-forward'));
+root=fileparts(fileparts(here));
+addpath(fullfile(root,'born-rytov'),fullfile(root,'maxwell-solver'));
 lambda=.532; n_m=1.335381534; n_p=1.37;
 a=5; b=2.5; N=128; dx=.1; padding=2; zd=7; NA=.1;
 k0=2*pi/lambda; k=n_m*k0;
@@ -26,7 +27,7 @@ results=table(lambda,n_m,n_p,a,b,N,dx,padding,zd,NA,born_error, ...
     corrected_rytov_error,far_gap,'VariableNames', ...
     {'lambda_um','n_m','n_p','a_um','b_um','Nxy','dx_um','padding', ...
     'z_det_um','NA','born_error','corrected_rytov_error','exact_far_gap'});
-writetable(results,fullfile(here,'rytov_analysis.csv'));
+writetable(results,fullfile(here,'forward_errors.csv'));
 fprintf('PROLATE_BASELINE Born=%.6f%% Rytov=%.6f%%\n', ...
     100*born_error,100*corrected_rytov_error);
 end

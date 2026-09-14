@@ -3,7 +3,9 @@ __pycache__/
 .venv/
 *.log
 # Regenerable reference and detector caches; the selected inverse reference is retained.
-forward/exp/oblate_reference_*.mat
-spheroid-analytic-forward/[12]/case_*_reference.mat
-!spheroid-analytic-forward/2/case_3_reference.mat
-inverse/results/exact_detector_512.mat
+experiments/field-analysis/oblate_reference_*.mat
+experiments/field-analysis/oblate_reference_validation.csv
+experiments/size-sweep/size_*_percent_reference.mat
+experiments/contrast-sweep/contrast_*_percent_reference.mat
+!experiments/contrast-sweep/contrast_1_percent_reference.mat
+reconstruction/results/exact_detector_512.mat
