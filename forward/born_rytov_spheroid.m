@@ -91,14 +91,14 @@ unconverged = true(size(inside));
 active = (1:size(pts,1)).';
 N = double(opts.N_theta);
 check_order = ceil(1.5*N);
-% ponytail: global orders per failed group; use local subdivision for near-surface fields.
+% Global orders per failed group; use local subdivision for near-surface fields.
 while ~isempty(active)
     pair_orders = [N, check_order];
     pair = complex(zeros(numel(active),2));
     for j = 1:2
         nodes = surface_nodes(a, b, k, khat, pair_orders(j));
         chunk_size = max(1, floor(double(opts.chunk)/size(nodes.xyz,1)));
-        % ponytail: serial point chunks; add parfor if measured throughput needs it.
+        % Serial point chunks; add parfor if measured throughput needs it.
         for first = 1:chunk_size:numel(active)
             local = first:min(first+chunk_size-1,numel(active));
             index = active(local);
@@ -137,7 +137,7 @@ while ~isempty(active)
         check_order = double(opts.N_max);
     end
 end
-% ponytail: double common-phase reduction; higher precision beyond the tested range.
+% Double common-phase reduction; higher precision beyond the tested range.
 common_phase = exp(1i*k*rho);
 u0 = reshape(u0f .* common_phase, shape);
 uB = reshape(phasefree .* common_phase, shape);

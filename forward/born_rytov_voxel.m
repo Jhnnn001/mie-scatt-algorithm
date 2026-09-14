@@ -164,7 +164,7 @@ for illumination = 1:n_illumination
     query_y = min(max(qy(propagating),ky_padded(1)),ky_padded(end));
     query_z = min(max(qz(propagating),kz_padded(1)),kz_padded(end));
     sampled_object = complex(zeros(size(KX)));
-    % ponytail: linear interpolation; add padding convergence or a NUFFT
+    % Linear interpolation; add padding convergence or a NUFFT
     % when reconstruction accuracy, rather than portfolio scale, requires it.
     sampled_object(propagating) = interpn(kx_padded, ky_padded, kz_padded, F, ...
         query_x, query_y, query_z, 'linear');
