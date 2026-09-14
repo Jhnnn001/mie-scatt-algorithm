@@ -8,7 +8,7 @@ Q = ∇ψ · ∇ψ,    f = k0²(n² − n_background²).
 ```
 
 Here `k_inc` is the incident wavevector and `k0 = 2π/λ0` is the vacuum wavenumber.
-The first-order Rytov approximation drops `Q` ([derivation, Section 3.2](https://arxiv.org/pdf/1507.00466#page=12)).
+The first-order Rytov approximation drops `Q` [1].
 Here `ψ` contains both log amplitude and phase, and `Q` uses a dot product without complex conjugation.
 
 For the [oblate baseline](../../README.md#results) at normal incidence, the largest sampled interior value on the `y=0` slice is **|Q|/|f| = 14.33**, at **(x,z) = (0,−0.20) μm**.
@@ -18,5 +18,14 @@ The omitted term is therefore locally large, although this ratio alone does not 
 ![Magnitude of the omitted Rytov term relative to the scattering potential](../../figures/rytov_nonlinear_term.png)
 
 A Hann-windowed axial spectrum over `|z| < 2.5 μm` contains a negative-`k_z` component well above the leakage from a pure forward plane wave.
-This supports a backward-wave contribution; a plausible explanation for the central maximum is interference with internally reflected waves concentrated near the axis.
+This supports a backward-wave contribution; a plausible explanation for the central maximum is interference between the forward field and internally reflected waves concentrated near the axis.
 The one-dimensional spectrum does not isolate reflection orders or measure reflected power.
+
+Internally reflected rays can form caustics, where neighboring ray paths concentrate [2].
+That paper studies a circular cylinder and provides physical background for this interpretation; it does not validate the cause or magnitude of the `Q` maximum in the present spheroid.
+
+## References
+
+[1] P. Müller, M. Schürmann, and J. Guck, *The Theory of Diffraction Tomography*, arXiv:1507.00466, Section 3.2. [PDF](https://arxiv.org/pdf/1507.00466#page=12).
+
+[2] C. L. Adler, J. A. Lock, B. R. Stone, and C. J. Garcia, “High-order interior caustics produced in scattering of a diagonally incident plane wave by a circular cylinder,” *JOSA A* **14**, 1305–1315 (1997), Section 1. [PDF](https://csuohio.elsevierpure.com/ws/portalfiles/portal/39955202/High-Order%20Interior%20Caustics%20Produced%20in%20Scattering%20of%20a%20Diagonal.pdf#page=2).
